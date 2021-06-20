@@ -71,7 +71,9 @@ export default {
                     .post('http://127.0.0.1:8001/api/login', this.user)
                     .then((response) => {
                     
-                        console.log(response.data)
+                        localStorage.setItem('token', response.data);
+                        
+                        this.$router.push({name: 'dashboard'});
                         
                     })
             }
