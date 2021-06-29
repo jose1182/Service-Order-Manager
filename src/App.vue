@@ -44,6 +44,25 @@
     <v-main>
       <router-view/>
     </v-main>
+    <v-snackbar
+    :key="index"
+    @input="updateNotification($event, index)"
+    v-for="(snackbar, index) in allNotifications"
+    v-model="snackbar.show"
+    >
+    {{ snackbar.text }}
+
+    <template v-slot:action="{ attrs }">
+        <v-btn
+        color="pink"
+        text
+        v-bind="attrs"
+        @click="removeNotification(index)"
+        >
+        Close
+        </v-btn>
+    </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -62,7 +81,8 @@ export default {
   },
   computed:{
     ...mapGetters({
-      loggedIn: 'user/loggedIn'
+      loggedIn: 'user/loggedIn',
+      allNotifications: 'application/notifications'
     }),
 /*     loggedIn(){
       return this.$store.getters['user/loggedIn'];
@@ -71,17 +91,31 @@ export default {
   methods:{
     ...mapActions({
       logoutUser: 'user/logoutUser',
-      checkUserState: 'user/setLoggedInState'
+      checkUserState: 'user/setLoggedInState',
+      removeNotification: 'application/removeNotification',
+      addNotification: 'application/addNotification'
     }),
     logout(){
         this.logoutUser()
-/*       this.$store
-        .dispatch('user/logoutUser') */
         .then(() => {
+          return this.addNotification({
+            text: 'Logged out!',
+            show: true
+          })
+          .then(() => {
             this.$router.push({name: 'login'});
+          })
+
         })
 
+    },
+
+    updateNotification(show, index){
+      if(!show){
+        this.removeNotification(index);
+      }
     }
   }
 };
 </script>
+,

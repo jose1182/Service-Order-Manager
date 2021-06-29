@@ -46,13 +46,13 @@ const actions = {
     },
 
     setLoggedInState(context){
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if(localStorage.getItem('token')){
                 context.commit('setLoggedIn', true);
                 resolve(true);
             } else {
-                context.commit('setLoggedIn', true);
-                reject(false);
+                context.commit('setLoggedIn', false);
+                resolve(false);
             }
         });
     },

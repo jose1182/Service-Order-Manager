@@ -48,7 +48,7 @@
                     ></v-text-field>
                     <v-text-field
                         id="password_confirmation"
-                        label="Password_confirmation"
+                        label="Password Confirmation"
                         name="password_confirmation"
                         prepend-icon="mdi-lock"
                         type="password"
@@ -64,27 +64,12 @@
             </v-col>
             </v-row>
         </v-container>
-        <v-snackbar
-        v-model="snackbar.show"
-        >
-        {{ snackbar.text }}
-
-        <template v-slot:action="{ attrs }">
-            <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="snackbar.show = false"
-            >
-            Close
-            </v-btn>
-        </template>
-        </v-snackbar>
     </div> 
 </template>
 <script>
 
 import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
     name: "Register",
@@ -96,14 +81,14 @@ export default {
                 name:'',
                 password:'',
                 password_confirmation: ''
-            },
-            snackbar:{
-                show: false,
-                text: 'success'
             }
         }
     },
     methods:{
+        ...mapActions({
+            addNotification: 'application/addNotification'
+        }),
+
         registerUser(){
             if(this.$refs.registerForm.validate()){
                 console.log(this.newUser);
@@ -111,19 +96,26 @@ export default {
                     .post('http://127.0.0.1:8001/api/register', this.newUser)
                     .then((response) => {
                         if(response.data && response.data.success){
-                            this.snackbar = {
-                                show : true,
-                                text : 'success'
-                            }                        
+                                this.addNotification({
+                                    show: true,
+                                    text: 'Success!'
+                                }).then(() => {
+                                    this.$router.push({
+                                        name: 'login'
+                                    });
+                                })
+                      
                         }
 
-                        this.$router.push({name:'login'});
+
                     })
                     .catch(() => {
-                        this.snackbar = {
-                            show : true,
-                            text : 'Failed!!!'
-                        }
+                        this.addNotification(
+                            {
+                                show : true,
+                                text : 'failed'
+                            }  
+                        )
                     })
                 //console.log({event, $form: this.$refs.registerForm.validate()});
             }

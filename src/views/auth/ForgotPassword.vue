@@ -41,23 +41,7 @@
                 </v-card>
             </v-col>
             </v-row>
-        </v-container>
-        <v-snackbar
-        v-model="snackbar.show"
-        >
-        {{ snackbar.text }}
-
-        <template v-slot:action="{ attrs }">
-            <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="snackbar.show = false"
-            >
-            Close
-            </v-btn>
-        </template>
-        </v-snackbar>        
+        </v-container>    
     </div>
 </template>
 <script>
@@ -68,29 +52,26 @@ export default {
     name: "ForgotPassword",
     data(){
         return{
-            email: '',
-            snackbar:{
-                text:'',
-                show: false
-            }
+            email: ''
         }
     },
     methods:{
         ...mapActions({
-            forgotPassword : 'user/forgotPassword'
+            forgotPassword : 'user/forgotPassword',
+            addNotification: 'application/addNotification'
         }),
         sendForgotPassword(){
             if(this.$refs.forgotPasswordForm.validate()){
                 this.forgotPassword({email: this.email} ).then(() => {
-                    this.snackbar = { 
+                    this.addNotification({
                         text : 'Email send!',
                         show : true
-                    }
+                    });
                 }).catch(() =>{
-                    this.snackbar = {
+                    this.addNotification({
                         text : 'Fail to send email!',
                         show : true
-                    }                    
+                    });                 
                 });
             }
         }

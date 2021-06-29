@@ -41,7 +41,7 @@
                     ></v-text-field>
                     <v-text-field
                         id="password_confirmation"
-                        label="Password_confirmation"
+                        label="Password Confirmation"
                         name="password_confirmation"
                         prepend-icon="mdi-lock"
                         type="password"
@@ -57,22 +57,6 @@
             </v-col>
             </v-row>
         </v-container>
-        <v-snackbar
-        v-model="snackbar.show"
-        >
-        {{ snackbar.text }}
-
-        <template v-slot:action="{ attrs }">
-            <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="snackbar.show = false"
-            >
-            Close
-            </v-btn>
-        </template>
-        </v-snackbar>
     </div> 
 </template>
 <script>
@@ -88,31 +72,30 @@ export default {
                 name:'',
                 password:'',
                 password_confirmation: ''
-            },
-            snackbar:{
-                show: false,
-                text: ''
             }
         }
     },
     methods:{
         ...mapActions({
-            resetPassword: 'user/resetPassword'
+            resetPassword: 'user/resetPassword',
+            addNotification: 'application/addNotification'
         }),
         sendResetPassword(){
             if(this.$refs.resetPasswordForm.validate()){
                 const token = this.$route.query.token;
                 this.resetPassword({...this.user, token: token}).then(() => {
-                    this.snackbar = {
+                    this.addNotification({
                         text: "Password changed",
                         show: true
-                    }
-                    this.$router.push({name: 'login'});
+                    }).then(() => {
+                        this.$router.push({name: 'login'});
+                    });
+
                 }).catch(() => {
-                    this.snackbar = {
+                    this.addNotification({
                         text: "Failed to change password!",
                         show: true
-                    }
+                    })                    
                 });
             }
         }
