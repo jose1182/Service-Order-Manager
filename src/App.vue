@@ -49,21 +49,38 @@
 
 <script>
 
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'App',
 
   data: () => ({
-    loggedIn :  false
+
   }),
   created(){
-    if(localStorage.getItem('token')){
-      this.loggedIn = true;
-    }
+    this.checkUserState();
+  },
+  computed:{
+    ...mapGetters({
+      loggedIn: 'user/loggedIn'
+    }),
+/*     loggedIn(){
+      return this.$store.getters['user/loggedIn'];
+    } */
   },
   methods:{
+    ...mapActions({
+      logoutUser: 'user/logoutUser',
+      checkUserState: 'user/setLoggedInState'
+    }),
     logout(){
-      localStorage.removeItem('token');
-      this.$router.push({name: 'login'});
+        this.logoutUser()
+/*       this.$store
+        .dispatch('user/logoutUser') */
+        .then(() => {
+            this.$router.push({name: 'login'});
+        })
+
     }
   }
 };
