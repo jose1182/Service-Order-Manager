@@ -1,27 +1,27 @@
-import axios from 'axios'
+import axios from '../../axios/index'
 
-const state = {
-    isLoggedIn: false,
-    userDetails: {}
-};
+export default {
 
-const mutations = {
-    setLoggedIn(state, payLoad){
-        state.isLoggedIn = payLoad;
-    }
-};
-
-const getters = {
-    loggedIn(state){
-        return state.isLoggedIn;
-    }
-}
-
-const actions = {
+    registerUser(context, payLoad){
+        return new Promise((resolve, reject) => {
+            axios
+                .post('register', payLoad)
+                .then((response) => {
+                    if(response.data){
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });    
+        });
+    },    
     loginUser(context, payLoad){
         return new Promise((resolve, reject) => {
             axios
-                .post('http://127.0.0.1:8001/api/login', payLoad)
+                .post('login', payLoad)
                 .then((response) => {
                     if(response.data.access_token){
                         localStorage.setItem('token', response.data);
@@ -61,7 +61,7 @@ const actions = {
         
         return new Promise((resolve, reject) => {
             axios
-                .post('http://127.0.0.1:8001/api/forgot-password', payLoad)
+                .post('forgot-password', payLoad)
                 .then((response) => {
                     resolve(response);
                 })
@@ -74,7 +74,7 @@ const actions = {
         
         return new Promise((resolve, reject) => {
             axios
-                .post('http://127.0.0.1:8001/api/reset-password', payLoad)
+                .post('reset-password', payLoad)
                 .then((response) => {
                     resolve(response);
                 })
@@ -82,13 +82,5 @@ const actions = {
                     reject(error);
                 });  
         });
-    }
-};
-
-export default {
-    namespaced: true,
-    state,
-    mutations,
-    getters,
-    actions
+    }    
 }

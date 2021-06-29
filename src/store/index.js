@@ -3,8 +3,8 @@ import Vuex from 'vuex'
 
 
 //modules
-import user from './user'
-import application from './application'
+import user from './user/index'
+import application from './application/index'
 
 
 Vue.use(Vuex)

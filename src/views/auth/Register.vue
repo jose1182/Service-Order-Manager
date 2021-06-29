@@ -68,7 +68,6 @@
 </template>
 <script>
 
-import axios from 'axios'
 import { mapActions } from 'vuex'
 
 export default {
@@ -86,14 +85,13 @@ export default {
     },
     methods:{
         ...mapActions({
-            addNotification: 'application/addNotification'
+            addNotification: 'application/addNotification',
+            register: 'user/registerUser'
         }),
 
         registerUser(){
             if(this.$refs.registerForm.validate()){
-                console.log(this.newUser);
-                axios
-                    .post('http://127.0.0.1:8001/api/register', this.newUser)
+                this.register(this.newUser)
                     .then((response) => {
                         if(response.data && response.data.success){
                                 this.addNotification({
