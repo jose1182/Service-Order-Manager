@@ -23,8 +23,8 @@ export default {
             axios
                 .post('login', payLoad)
                 .then((response) => {
-                    if(response.data.access_token){
-                        localStorage.setItem('token', response.data);
+                    if (response.data.access_token) {
+                        localStorage.setItem('token', response.data.access_token);
                         context.commit('setLoggedIn', true);
                         resolve(response);
                     } else {
@@ -82,5 +82,21 @@ export default {
                     reject(error);
                 });  
         });
-    }    
+    },
+    
+    me(context){
+        return new Promise((resolve, reject) => {
+            axios
+                .get('me')
+                .then((response) => {
+                    context.commit('setUserDetails', response.data.data);
+                    console.log(response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });              
+        })
+    }
 }
