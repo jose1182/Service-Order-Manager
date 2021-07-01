@@ -83,7 +83,6 @@ export default {
                 });  
         });
     },
-    
     me(context){
         return new Promise((resolve, reject) => {
             axios
@@ -98,5 +97,39 @@ export default {
                     reject(error);
                 });              
         })
-    }
+    },
+    changePassword(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('change-password', payLoad)
+                .then((response) => {
+                    if(response.data.success){
+                        resolve(response);
+                    } else {
+                        reject(response);                        
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    updateDetails(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('change-details', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
 }

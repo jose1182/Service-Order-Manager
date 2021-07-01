@@ -29,15 +29,160 @@
             </v-card>
         </v-col>
         </v-row>
+        <v-row
+        align="center"
+        justify="center"
+        >
+        <v-col
+            cols="12"
+            sm="8"
+            md="4"
+        >
+            <v-card class="elevation-12">
+            <v-toolbar
+                color="primary"
+                dark
+                flat
+            >
+                <v-toolbar-title>Change details</v-toolbar-title>
+                <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text>
+                <v-form ref="changeDetailsForm">
+                <v-text-field
+                    label="Name"
+                    name="name"
+                    prepend-icon="mdi-account"
+                    type="text"
+                    v-model="userDetails.name"
+                ></v-text-field>           
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="changeDetails">Save</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-col>
+        </v-row>
+         
+        <v-row
+        align="center"
+        justify="center"
+        >
+        <v-col
+            cols="12"
+            sm="8"
+            md="4"
+        >
+            <v-card class="elevation-12">
+            <v-toolbar
+                color="primary"
+                dark
+                flat
+            >
+                <v-toolbar-title>Change password</v-toolbar-title>
+                <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-card-text>
+                <v-form ref="changePasswordForm">
+                <v-text-field
+                    label="Old password"
+                    name="oldpasssword"
+                    prepend-icon="mdi-lock"
+                    type="password"
+                    v-model="user.oldPassword"
+                ></v-text-field>
+
+                <v-text-field
+                    id="newPassword"
+                    label="New password"
+                    name="newPassword"
+                    prepend-icon="mdi-lock"
+                    type="password"
+                    v-model="user.newPassword"
+                ></v-text-field>
+                <v-text-field
+                    id="newPasswordConfirmation"
+                    label="New password confirmation"
+                    name="newPasswordConfirmation"
+                    prepend-icon="mdi-lock"
+                    type="password"
+                    v-model="user.newPasswordConfirmation"
+                ></v-text-field>                
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="changePassword">Change password</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-col>
+        </v-row>       
     </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
+    data(){
+        return{
+            user: {
+                oldPassword : '',
+                newPassword: '',
+                newPasswordConfirmation: ''
+            },
+        }
+    },
     computed:{
         ...mapGetters({
-            userDetails: "user/userDetails"
-        })
+            userDetails: "user/userDetails",
+        }),
+    },
+    methods:{
+        ...mapActions({
+            updateDetails: "user/updateDetails",
+            addNotification: 'application/addNotification',
+            changeUserPassword: "user/changePassword"
+        }),
+        changeDetails(){
+
+            if(!this.$refs.changeDetailsForm.validate()){
+                return false;
+            }
+
+            this.updateDetails(this.userDetails)
+                .then(() => {
+                    this.addNotification({
+                        text: 'Details Change!',
+                        show: true
+                    })
+                })
+                .catch(() => {
+                    this.addNotification({
+                        text: 'Faild to change details!',
+                        show: true
+                    })
+                });
+        },
+        changePassword(){
+            if(!this.$refs.changePasswordForm.validate()){
+                return false;
+            }
+            
+            this.changeUserPassword(this.user)
+                .then(() => {
+                    this.addNotification({
+                        text: 'Password Changed!',
+                        show: true
+                    })
+                })
+                .catch(() => {
+                    this.addNotification({
+                        text: 'Faild to change password!',
+                        show: true
+                    })
+                });
+        }
     }
 }
 </script>
