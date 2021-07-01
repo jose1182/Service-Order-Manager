@@ -4,6 +4,6 @@ export default {
     },
 
     setUserDetails(state, payload){
-        state.setUserDetails = payload;
+        state.userDetails = payload;
     }
 }
