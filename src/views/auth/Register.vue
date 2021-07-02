@@ -27,6 +27,7 @@
                     <v-text-field
                         label="Name"
                         name="name"
+                        :rules="nameRules"
                         prepend-icon="mdi-account"
                         type="text"
                         v-model="newUser.name"
@@ -34,6 +35,7 @@
                     <v-text-field
                         label="Email"
                         name="email"
+                        :rules="emailRules"
                         prepend-icon="mdi-email"
                         type="email"
                         v-model="newUser.email"
@@ -42,6 +44,7 @@
                         id="password"
                         label="Password"
                         name="password"
+                        :rules="[...passwordRules, customPasswordValidator]"
                         prepend-icon="mdi-lock"
                         type="password"
                         v-model="newUser.password"
@@ -50,6 +53,7 @@
                         id="password_confirmation"
                         label="Password Confirmation"
                         name="password_confirmation"
+                        :rules="[...passwordRules, customPasswordValidator]"
                         prepend-icon="mdi-lock"
                         type="password"
                         v-model="newUser.password_confirmation"
@@ -80,7 +84,21 @@ export default {
                 name:'',
                 password:'',
                 password_confirmation: ''
-            }
+            },
+            requiredRules:[
+                v => !!v || 'This field is required'
+            ],            
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            ],   
+            passwordRules:[
+                v => !!v || 'Name is required',    
+                v => (!!v && v.length > 6 ) || 'Password is to short'
+            ],
+            nameRules:[
+                v => !!v || 'Name is required',             
+            ]    
         }
     },
     methods:{
@@ -118,6 +136,9 @@ export default {
                 //console.log({event, $form: this.$refs.registerForm.validate()});
             }
 
+        },
+        customPasswordValidator(){
+            return (this.newUser.password === this.newUser.password_confirmation) || 'New Password is not confirmed'
         }
     }
 }

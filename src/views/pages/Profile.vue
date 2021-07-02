@@ -54,6 +54,7 @@
                     name="name"
                     prepend-icon="mdi-account"
                     type="text"
+                    :rules="requiredRules"
                     v-model="userDetails.name"
                 ></v-text-field>           
                 </v-form>
@@ -89,6 +90,7 @@
                 <v-text-field
                     label="Old password"
                     name="oldpasssword"
+                    :rules="[...requiredRules, ...passwordRules]"
                     prepend-icon="mdi-lock"
                     type="password"
                     v-model="user.oldPassword"
@@ -98,6 +100,7 @@
                     id="newPassword"
                     label="New password"
                     name="newPassword"
+                    :rules="[...requiredRules, ...passwordRules, customValidator]"
                     prepend-icon="mdi-lock"
                     type="password"
                     v-model="user.newPassword"
@@ -106,6 +109,7 @@
                     id="newPasswordConfirmation"
                     label="New password confirmation"
                     name="newPasswordConfirmation"
+                    :rules="[...requiredRules, ...passwordRules, customValidator]"
                     prepend-icon="mdi-lock"
                     type="password"
                     v-model="user.newPasswordConfirmation"
@@ -131,6 +135,12 @@ export default {
                 newPassword: '',
                 newPasswordConfirmation: ''
             },
+            requiredRules:[
+                v => !!v || 'This field is required'
+            ],            
+            passwordRules:[
+                v => (!!v && v.length > 6 ) || 'Password is to short'
+            ]
         }
     },
     computed:{
@@ -182,6 +192,9 @@ export default {
                         show: true
                     })
                 });
+        },
+        customValidator(){
+            return (this.user.newPasswordConfirmation === this.user.newPassword) || 'New password is not confimed'
         }
     }
 }

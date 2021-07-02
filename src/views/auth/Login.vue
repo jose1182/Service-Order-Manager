@@ -27,6 +27,7 @@
                     <v-text-field
                         label="Email"
                         name="email"
+                        :rules="emailRules"
                         prepend-icon="mdi-account"
                         type="email"
                         v-model="user.email"
@@ -36,6 +37,7 @@
                         id="password"
                         label="Password"
                         name="password"
+                        :rules="passwordRules"
                         prepend-icon="mdi-lock"
                         type="password"
                         v-model="user.password"
@@ -63,7 +65,14 @@ export default {
             user:{
                 email: '',
                 password:''
-            }
+            },
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+            ],
+            passwordRules:[
+                v => !!v || 'Password is required'
+            ]           
         }
     },
     methods:{

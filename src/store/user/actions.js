@@ -104,12 +104,11 @@ export default {
             axios
                 .post('change-password', payLoad)
                 .then((response) => {
-                    if(response.data.success){
+                    if (response.data.success) {
                         resolve(response);
                     } else {
-                        reject(response);                        
-                    }
-                })
+                        reject(response);
+                    }                })
                 .catch((error) => {
                     reject(error);
                 });  
