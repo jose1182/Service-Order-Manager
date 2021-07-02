@@ -27,6 +27,7 @@
                     <v-text-field
                         label="Email"
                         name="email"
+                        :rules="emailRules"
                         prepend-icon="mdi-email"
                         type="email"
                         v-model="user.email"
@@ -35,6 +36,7 @@
                         id="password"
                         label="Password"
                         name="password"
+                        :rules="[...passwordRules, customPasswordValidator]"
                         prepend-icon="mdi-lock"
                         type="password"
                         v-model="user.password"
@@ -43,6 +45,7 @@
                         id="password_confirmation"
                         label="Password Confirmation"
                         name="password_confirmation"
+                        :rules="[...passwordRules, customPasswordValidator]"
                         prepend-icon="mdi-lock"
                         type="password"
                         v-model="user.password_confirmation"
@@ -62,9 +65,10 @@
 <script>
 
 import { mapActions } from 'vuex'
-
+import PasswordValidationMixin from '../../mixins/PasswordValidationMixin'
 export default {
     name: "ResetPassword",
+    mixins:[PasswordValidationMixin],    
     data(){
         return{
             formValid: false,

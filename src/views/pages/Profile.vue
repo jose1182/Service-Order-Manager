@@ -127,7 +127,10 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import PasswordValidationMixin from '../../mixins/PasswordValidationMixin'
+
 export default {
+    mixins:[PasswordValidationMixin],
     data(){
         return{
             user: {
@@ -135,12 +138,12 @@ export default {
                 newPassword: '',
                 newPasswordConfirmation: ''
             },
-            requiredRules:[
-                v => !!v || 'This field is required'
-            ],            
-            passwordRules:[
-                v => (!!v && v.length > 6 ) || 'Password is to short'
-            ]
+            // requiredRules:[
+            //     v => !!v || 'This field is required'
+            // ],            
+            // passwordRules:[
+            //     v => (!!v && v.length > 6 ) || 'Password is to short'
+            // ]
         }
     },
     computed:{
