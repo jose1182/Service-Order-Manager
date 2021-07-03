@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
 
@@ -64,7 +64,8 @@ const routes = [
         name: 'dashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/pages/Dashboard.vue'),
         meta:{
-          middleware:[Middlewares.auth]
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-technical-dashboard']
         }
       },
       {
@@ -87,39 +88,35 @@ const router = new VueRouter({
   routes
 })
 
-function nextCheck(context, middleware, index){
-
+function nextCheck(context, middleware, index) {
   const nextMiddleware = middleware[index];
 
-  if(!nextMiddleware) return context.next;
+  if (!nextMiddleware) return context.next;
 
   return (...parameters) => {
+      context.next(...parameters);
+      const nextMidd = nextCheck(context, middleware, index + 1);
 
-    context.next(...parameters);
-    const nextMidd = nextCheck(context, middleware, index + 1);
-    
-    nextMiddleware({...context, next: nextMidd});
+      nextMiddleware({...context, next: nextMidd});
   }
 }
 
 router.beforeEach((to, from, next) => {
-  if(to.meta.middleware){
-    const middleware = Array.isArray(to.meta.middleware) ? to.meta.middleware: [to.meta.middleware];
+  if (to.meta.middleware) {
+      const middleware = Array.isArray(to.meta.middleware) ? to.meta.middleware : [to.meta.middleware];
 
-    const context = {
-      from,
-      next,
-      router,
-      to
-    };
+      const ctx = {
+          from,
+          next,
+          router,
+          to
+      };
 
-    const nextMiddleware = nextCheck(context, middleware, 1);
+      const nextMiddleware = nextCheck(ctx, middleware, 1);
 
-    return middleware[0]({...context, next: nextMiddleware})
+      return middleware[0]({...ctx, next: nextMiddleware});
   }
 
   return next();
-
-})
-
+});
 export default router

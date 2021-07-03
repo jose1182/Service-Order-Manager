@@ -1,12 +1,16 @@
 <template>
-  <hello-world />
+  <div>
+    <hello-world />
+    <router-link :to="{name: 'dashboard'}">Dashboard</router-link>  
+  </div>
+
 </template>
 
 <script>
   import HelloWorld from '../../components/HelloWorld'
 
   export default {
-    name: 'Home',
+    name: 'home',
 
     components: {
       HelloWorld,
