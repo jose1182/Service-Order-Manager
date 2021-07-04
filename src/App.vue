@@ -34,6 +34,7 @@ export default {
 
   }),
   created(){
+    console.log(this.$constants, 'test');
     this.checkUserState().then(() => {
       if(this.isLoggedIn){
         this.me().then(() => {
