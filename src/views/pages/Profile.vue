@@ -148,8 +148,8 @@ export default {
     },
     computed:{
         ...mapGetters({
-            userDetails: "user/userDetails",
-        }),
+            userDetails: "user/userDetails"
+        })
     },
     methods:{
         ...mapActions({

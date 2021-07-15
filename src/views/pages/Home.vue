@@ -1,7 +1,7 @@
 <template>
   <div>
     <hello-world />
-    <router-link :to="{name: 'dashboard'}">Dashboard</router-link>  
+    <router-link :to="{name: 'dashboard'}">Dashboard</router-link>
   </div>
 
 </template>

@@ -1,10 +1,11 @@
 <template>
   <v-main>
-    <SidePanel/>
+
     <v-toolbar mt5 flat>
       <v-toolbar-title>
         <span class="caption">Overview Dashboard></span><br>Tranding View
       </v-toolbar-title>
+      
       <v-app-bar flat color="rgba(0,0,0,0)" class="ml-16">
 
         <v-spacer></v-spacer>
@@ -47,25 +48,15 @@
         </v-menu>
       </v-app-bar>
     </v-toolbar>
-    <v-divider></v-divider>
-
-   
-      <router-view/>
+    <v-spacer></v-spacer>
 
 
-  </v-main>
-  
+</v-main>
 </template>
 
 <script>
-
-import SidePanel from '../../components/SidePanel.vue'
-
 export default {
-  name: 'AppLayout',
-  components: {
-    SidePanel
-  },
+  name: 'Home',
   data: () => ({
      tab: null,
      text: 'center',

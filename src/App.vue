@@ -1,5 +1,6 @@
 <template>
   <v-app>
+
     <router-view/>
     <v-snackbar
     :key="index"
@@ -27,9 +28,12 @@
 
 import { mapGetters, mapActions } from 'vuex'
 
+
 export default {
   name: 'App',
-
+  components:{
+  
+  },
   data: () => ({
 
   }),

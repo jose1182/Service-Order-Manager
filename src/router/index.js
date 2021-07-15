@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/pages/Home.vue'
+import Login from '../views/auth/Login.vue'
 import Middlewares from '../middlewares/'
 import AuthLayout from '../views/layouts/AuthLayout.vue'
 import AppLayout from '../views/layouts/AppLayout.vue'
@@ -10,8 +10,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'login',
+    component: Login
   },
 
   {
@@ -60,7 +60,7 @@ const routes = [
     component: AppLayout,
     children:[
       {
-        path: 'dashboard',
+        path: '/dashboard',
         name: 'dashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/pages/Dashboard.vue'),
         meta:{
@@ -75,7 +75,41 @@ const routes = [
         meta:{
           middleware:[Middlewares.auth]
         }
-      }
+      },
+      {
+        path: '/import',
+        name: 'import',
+        component: () => import(/* webpackChunkName: "import" */ '../views/pages/ImportDataBase.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-technical-dashboard']
+        }
+      },
+      {
+        path: '/order-tables',
+        name: 'order-tables',
+        component: () => import(/* webpackChunkName: "order-tables" */ '../views/pages/tables/OrdersDetailTable.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-technical-dashboard']
+        }
+      },
+      {
+        path: '/edit-order/:orderId',
+        name: 'edit-order',
+        props: true,
+        beforeEnter: (to, from, next) => {
+          to.params.myCustomizations = {
+        
+          }
+          next();
+        },
+        component: () => import(/* webpackChunkName: "edit-order" */ '../views/pages/orders/EditServiceOrder.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-technical-dashboard']
+        }
+      },
     ]
   }
 

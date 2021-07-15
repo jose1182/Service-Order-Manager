@@ -79,13 +79,11 @@ export default {
                 this.login(this.user)
                     .then(() => {
                         this.addNotification({
-                            text: 'Welcome!',
-                            show: true
+                            show: true,
+                            text: 'Welcome'
+                        }).then(() => {
+                            this.$router.push({name: 'dashboard'});
                         })
-                            .then(() => {
-                                this.$router.push({name:'dashboard'});                                
-                            })
-
                     })
                     .catch(() => {
                         this.addNotification({

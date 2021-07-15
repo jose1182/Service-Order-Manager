@@ -18,23 +18,23 @@ export default {
                 });    
         });
     },    
-    loginUser(context, payLoad){
+    loginUser(context, payload) {
         return new Promise((resolve, reject) => {
             axios
-                .post('login', payLoad)
+                .post('login', payload)
                 .then((response) => {
                     if (response.data.access_token) {
                         localStorage.setItem('token', response.data.access_token);
                         context.commit('setLoggedIn', true);
-                        resolve(response);
+                        context.dispatch('me').then(() => resolve(response));
                     } else {
                         reject(response);
                     }
                 })
                 .catch((error) => {
                     reject(error);
-                });    
-        });
+                })
+        })
     },
 
     logoutUser(context){

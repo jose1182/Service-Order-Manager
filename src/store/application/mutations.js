@@ -4,5 +4,8 @@ export default {
     },
     removeNotification(state, payload){
         state.notifications.splice(payload, 1);
-    }
+    },
+    setListOrders(state, payload){
+        state.orders.push(payload);
+    },
 }
