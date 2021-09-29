@@ -1,4 +1,7 @@
 export default {
     notifications : [],
-    orders:[]
+    orders:[],
+    customers:[],
+    projects:[],
+    serviceDetails: {},
 }

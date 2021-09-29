@@ -4,5 +4,8 @@ export default {
     },
     userDetails(state){
         return state.userDetails;
+    },
+    listUsers(state){
+        return state.listUsers;
     }
 }

@@ -37,7 +37,7 @@ export default {
                 .post('import-orders', payLoad)
                 .then((response) => {
                     if (response.data) {
-                        console.log(response);
+                        context.dispatch('orders').then(() => resolve(response));
                         resolve(response);
                     } else {
                         reject(response);
@@ -53,7 +53,7 @@ export default {
                 .get('list-orders')
                 .then((response) => {
                     context.commit('setListOrders', response.data.data);
-                    console.log(response.data);
+                    console.log('orders', response.data);
                     resolve(response);
                 })
                 .catch((error) => {
@@ -74,4 +74,116 @@ export default {
                 });  
         });
     },
+    createService(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('create-service', payLoad)
+                .then((response) => {
+                    if (response.data) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    getCustomers(context){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .get('list-customers')
+                .then((response) => {
+                    context.commit('setListCustomers', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                }); 
+        });
+    },
+    createCustomer(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('create-customer', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        context.dispatch('getCustomers').then(() => resolve(response));
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    updateCustomer(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('update-customer', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    deleteCustomer(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`delete-customer/${payLoad}`)
+                .then((response) => {
+                    if (response.data.success) {
+                        context.dispatch('getCustomers').then(() => resolve(response));
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    getService(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`show-service/${payLoad}`)
+                .then((response) => {
+                    context.commit('setServiceDetails', response.data.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+
+    getProjects(context){
+        return new Promise((resolve, reject) => {
+            axios
+                .get('list-projects')
+                .then((response) => {
+                    context.commit('setListProjects', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });              
+        })
+    },
+
 }

@@ -5,5 +5,8 @@ export default {
 
     setUserDetails(state, payload){
         state.userDetails = payload;
+    },
+    setListUsers(state, payload){
+        state.listUsers = payload;
     }
 }

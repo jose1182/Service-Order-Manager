@@ -9,6 +9,10 @@ import axios from './axios'
 Vue.config.productionTip = false
 Vue.prototype.$can = can;
 
+
+export const bus = new Vue();
+
+
 let instance = new Vue({
   router,
   store,

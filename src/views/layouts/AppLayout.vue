@@ -1,21 +1,23 @@
 <template>
   <v-main>
     <SidePanel/>
-    <v-toolbar mt5 flat>
+    <v-toolbar 
+      mt5 
+      flat
+      fixed>
+      
       <v-toolbar-title>
         <span class="caption">Overview Dashboard></span><br>Tranding View
       </v-toolbar-title>
       <v-app-bar flat color="rgba(0,0,0,0)" class="ml-16">
 
         <v-spacer></v-spacer>
-
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-
+        
         <v-btn icon>
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
+  
+        <DialogService/>
 
         <v-menu
           left
@@ -59,12 +61,15 @@
 
 <script>
 
+import { bus } from '../../main'
 import SidePanel from '../../components/SidePanel.vue'
+import DialogService from '../../components/dialog/DialogService.vue'
 
 export default {
   name: 'AppLayout',
   components: {
-    SidePanel
+    SidePanel,
+    DialogService
   },
   data: () => ({
      tab: null,
@@ -78,6 +83,12 @@ export default {
       type: 'trend',
       autoLineWidth: false,
       fills: false,
-  })
+  }),
+  methods:{
+    openDialogService(){
+      console.log('testing dialog');
+      bus.$emit('dialog', true);
+    }
+  }
 }
 </script>

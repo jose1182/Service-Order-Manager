@@ -6,6 +6,15 @@ export default {
         state.notifications.splice(payload, 1);
     },
     setListOrders(state, payload){
-        state.orders.push(payload);
+        state.orders = payload;
     },
+    setListCustomers(state, payload){
+        state.customers = payload;
+    },
+    setServiceDetails(state, payload){
+        state.serviceDetails = payload;
+    },
+    setListProjects(state, payload){
+        state.projects = payload;
+    }
 }

@@ -65,7 +65,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/pages/Dashboard.vue'),
         meta:{
           middleware: [Middlewares.auth, Middlewares.checkPermissions],
-          permissions: ['view-technical-dashboard']
+          permissions: ['view-technical-dashboard', 'view-admin-dashboard']
         }
       },
       {
@@ -86,17 +86,33 @@ const routes = [
         }
       },
       {
-        path: '/order-tables',
-        name: 'order-tables',
-        component: () => import(/* webpackChunkName: "order-tables" */ '../views/pages/tables/OrdersDetailTable.vue'),
+        path: '/orders',
+        name: 'orders',
+        component: () => import(/* webpackChunkName: "orders" */ '../views/pages/admin/orders/Orders.vue'),
         meta:{
           middleware: [Middlewares.auth, Middlewares.checkPermissions],
           permissions: ['view-technical-dashboard']
         }
       },
       {
-        path: '/edit-order/:orderId',
-        name: 'edit-order',
+        path: '/service/:serviceId',
+        name: 'service',
+        props: true,
+        beforeEnter: (to, from, next) => {
+          to.params.myCustomizations = {
+
+          }
+          next();
+        },
+        component: () => import(/* webpackChunkName: "service" */ '../views/pages/admin/service/Service.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-technical-dashboard']
+        }
+      },
+      {
+        path: '/orders_v2/:orderId',
+        name: 'orders_v2',
         props: true,
         beforeEnter: (to, from, next) => {
           to.params.myCustomizations = {
@@ -104,10 +120,30 @@ const routes = [
           }
           next();
         },
-        component: () => import(/* webpackChunkName: "edit-order" */ '../views/pages/orders/EditServiceOrder.vue'),
+        component: () => import(/* webpackChunkName: "edit-order" */ '../views/pages/admin/orders/Orders_v2.vue'),
         meta:{
           middleware: [Middlewares.auth, Middlewares.checkPermissions],
           permissions: ['view-technical-dashboard']
+        }
+      },
+      {
+        path: '/users',
+        name: 'users',
+        props: true,
+        component: () => import(/* webpackChunkName: "users" */ '../views/pages/admin/users/Users.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-admin-dashboard']
+        }
+      },
+      {
+        path: '/customers',
+        name: 'customers',
+        props: true,
+        component: () => import(/* webpackChunkName: "customers" */ '../views/pages/admin/costumers/Customers.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-admin-dashboard']
         }
       },
     ]

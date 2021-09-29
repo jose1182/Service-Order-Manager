@@ -131,4 +131,31 @@ export default {
                 });  
         });
     },
+    allUsers(context){
+        return new Promise((resolve, reject) => {
+            axios
+                .get('list-users')
+                .then((response) => {
+                    context.commit('setListUsers', response.data.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });              
+        })
+    },
+    switchRoles(context, payload){
+        return new Promise((resolve, reject) => {
+            axios
+                .post('switch-roles', payload)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });              
+        })
+    },
 }

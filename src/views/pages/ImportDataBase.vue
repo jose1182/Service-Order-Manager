@@ -1,76 +1,81 @@
 <template>
     <v-app>
-        <v-layout mt-5>
-            <v-flex xs6>
-                <v-card  raised
-                    elevation="2"
-                    outlined
-                    >
-                <v-card-title>
-                    Import Customers data
-                </v-card-title>
-
-                    <v-form
-                        ref="fileForm"
-                        v-model="valid"
-                        lazy-validation
-                    >
-
-                        <v-file-input
-                            accept=".xlsx"
-                            show-size
-                            label="File input"
-                            v-model="file"
-                        ></v-file-input>
-
-                        <v-btn
-                        color="success"
-                        class="mr-4"
-                        @click="uploadFile"
+        <v-container>
+            <v-layout mt-5>
+                <v-flex 
+                    cols="12"
+                >
+                    <v-card  raised
+                        elevation="2"
+                        outlined
                         >
-                        Upload file
-                        </v-btn>
+                    <v-card-title>
+                        Import Customers data
+                    </v-card-title>
 
-                    </v-form>
-                </v-card>        
-            </v-flex>
-
-            <v-flex xs6>
-                <v-card  raised
-                    elevation="2"
-                    outlined
-                    >
-                <v-card-title>
-                    Import orders details
-                </v-card-title>
-
-                    <v-form
-                        ref="fileFormOrders"
-                        v-model="valid"
-                        lazy-validation
-                    >
-
-                        <v-file-input
-                            accept=".xls"
-                            show-size
-                            label="File input"
-                            v-model="orderFile"
-                        ></v-file-input>
-
-                        <v-btn
-                        color="success"
-                        class="mr-4"
-                        @click="uploadFileOrders"
+                        <v-form
+                            ref="fileForm"
+                            v-model="valid"
+                            lazy-validation
                         >
-                        Upload file
-                        </v-btn>
 
-                    </v-form>
-                </v-card>        
-            </v-flex>            
+                            <v-file-input
+                                accept=".xlsx"
+                                show-size
+                                label="File input"
+                                v-model="file"
+                            ></v-file-input>
 
+                            <v-btn
+                            color="success"
+                            class="mr-4"
+                            @click="uploadFile"
+                            >
+                            Upload file
+                            </v-btn>
 
-        </v-layout>
+                        </v-form>
+                    </v-card>        
+                </v-flex>
+
+                <v-flex
+                    cols="12"
+                >
+                    <v-card  raised
+                        elevation="2"
+                        outlined
+                        >
+                    <v-card-title>
+                        Import orders details
+                    </v-card-title>
+
+                        <v-form
+                            ref="fileFormOrders"
+                            v-model="valid"
+                            lazy-validation
+                        >
+
+                            <v-file-input
+                                color="deep-purple accent-4"
+                                accept=".xls"
+                                show-size
+                                label="Select your file"
+                                v-model="orderFile"
+                            ></v-file-input>
+
+                            <v-btn
+                            color="success"
+                            class="mr-4"
+                            @click="uploadFileOrders"
+                            >
+                            Upload file
+                            </v-btn>
+
+                        </v-form>
+                    </v-card>        
+                </v-flex>            
+            </v-layout>
+        </v-container>
     </v-app>
 </template>
 
