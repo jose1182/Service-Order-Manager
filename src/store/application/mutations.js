@@ -16,5 +16,14 @@ export default {
     },
     setListProjects(state, payload){
         state.projects = payload;
+    },
+    setListContacts(state, payload){
+        state.contacts = payload;
+    },
+    setListEndContacts(state, payload){
+        state.endContacts = payload;
+    },
+    setEndCustomer(state, payload){
+        state.endCustomer = payload;
     }
 }

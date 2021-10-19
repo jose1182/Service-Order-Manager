@@ -186,4 +186,50 @@ export default {
         })
     },
 
+    getContactsByCostumer(context, payLoad){
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`list-contactsId/${payLoad}`)
+                .then((response) => {
+                    console.log(response.data)
+                    context.commit('setListContacts', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+
+    getEndContactsByCostumer(context, payLoad){
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`list-contactsId/${payLoad}`)
+                .then((response) => {
+                    console.log(response.data)
+                    context.commit('setListEndContacts', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+
+    getCustomerById(context, payLoad){
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`get-customer/${payLoad}`)
+                .then((response) => {
+                    console.log(response.data)
+                    context.commit('setEndCustomer', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    }
+
+
 }

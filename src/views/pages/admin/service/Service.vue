@@ -1,515 +1,551 @@
 <template>
 <v-app>
-  <v-container
-    class="spacing-playground pa-md-12 mx-lg-auto"
-    > 
-    <v-card
-      color="lime lighten-5"
-      :loading="isUpdating"
-    >
-
-    <v-toolbar
-      flat
-      color="light-green"
-      dark
-    >
-      <v-icon>mdi-form-select</v-icon>
-      <v-toolbar-title class="font-weight-light">
-        Order Service
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        color="purple darken-3"
-        fab
-        small
-        @click="isUpdating = !isUpdating"
+    <v-container
+      class="spacing-playground pa-md-12 mx-lg-auto"
+      > 
+      <v-card
+        v-if="enabled"
+        color="lime lighten-5"
+        :loading="isUpdating"
       >
-        <v-icon v-if="isUpdating">
-          mdi-close
-        </v-icon>
-        <v-icon v-else>
-          mdi-pencil
-        </v-icon>
-      </v-btn>
-    </v-toolbar>
 
-      <v-form>
-        <v-container
-          fluid
+      <v-toolbar
+        flat
+        color="light-green"
+        dark
+      >
+        <v-icon>mdi-form-select</v-icon>
+        <v-toolbar-title class="font-weight-light">
+          Order Service
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="purple darken-3"
+          fab
+          small
+          @click="isUpdating = !isUpdating"
         >
-          <h2 class="text-h6">
-            Order
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-if="serviceDetails.order_details"
-                v-model="serviceDetails.order_details.order_service"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Service order"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
+          <v-icon v-if="isUpdating">
+            mdi-close
+          </v-icon>
+          <v-icon v-else>
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
 
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
+        <v-form>
+          <v-container
+            fluid
+          >
+            <h2 class="text-h6">
+              Order
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="3"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
+                <v-text-field
+                  v-if="serviceDetails.order_details"
+                  v-model="serviceDetails.order_details.order_service"
+                  :disabled="isUpdating"
+                  outlined
+                  dense
+                  label="Service order"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+
+                <v-menu
+                  v-if="serviceDetails.issue_date"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="serviceDetails.issue_date"
+                      :disabled="isUpdating"
+                      outlined
+                      dense
+                      label="Issue date"
+                      prepend-icon="mdi-calendar"
+                      color="blue-grey lighten-2"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
                     v-model="serviceDetails.issue_date"
-                    :disabled="isUpdating"
-                    filled
-                    label="Issue date"
-                    prepend-icon="mdi-calendar"
-                    color="blue-grey lighten-2"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="serviceDetails.issue_date"
-                  @input="menu2 = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-          
-            <v-select
-              v-if="serviceDetails.project"
-              v-model="serviceDetails.project.name"
-              :items="projectList"
-              item-text="name"
-              item-value="value"
-              label="Select Project"
-              filled
-              color="blue-grey lighten-2"
+                    @input="menu2 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
               >
-            </v-select>
-           
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-if="serviceDetails.order_details"
-                v-model="serviceDetails.order_details.pev"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Pev"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            Customer contact person
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="3"
-            >
+            
               <v-select
-                v-if="serviceDetails.costumer"
-                v-model="serviceDetails.costumer.name"
-                :items="costumerList"
+                v-if="serviceDetails.project"
+                v-model="serviceDetails.project.name"
+                :items="projectList"
+                outlined
+                dense
                 item-text="name"
                 item-value="value"
-                label="Costumer"
-                filled
+                label="Select Project"
                 color="blue-grey lighten-2"
                 >
               </v-select>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].name"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Name"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].phone"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Phone"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].email"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="E-mail"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            End customer contact person
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Customer"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Name"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Phone"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="E-mail"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            Address intallation
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="5"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Address"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="City"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Zip"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Province"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            Address intallation
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Service date"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Start time"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="2"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Expected hours"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Responsible account"
-              ></v-text-field>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
-              <v-text-field
-                v-model="contact[0].costumer"
-                :disabled="isUpdating"
-                filled
-                color="blue-grey lighten-2"
-                label="Technical responsible"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            Address intallation
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="12"
-            >
-              <v-textarea
-                v-model="contact[0].costumer"
-                auto-grow
-                filled
-                color="blue-grey lighten-2"
-                label="Description"
-                rows="4"
-                row-height="30"
-                counter
-              ></v-textarea>            
-            </v-col>
-          </v-row>
-          <h2 class="text-h6">
-            Service Incidents
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="9"
-            >
+            
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-if="serviceDetails.order_details"
+                  v-model="serviceDetails.order_details.pev"
+                  :disabled="isUpdating"
+                  outlined
+                  dense
+                  color="blue-grey lighten-2"
+                  label="Pev"
+                ></v-text-field>
+              </v-col>
+            </v-row>
             <h2 class="text-h6">
-              Issues Service
+              Customer contact person
             </h2>
-              <v-row>
-                <v-col
-                  cols="12"
-                >
-                  <v-switch
-                    v-model="contact[0].costumer"
-                    label="Incidence"
-                    color="success"
-                    value="success"
-                    hide-details
-                  ></v-switch>      
-                </v-col> 
-                <v-col
-                  cols="12"
-                >
-                  <v-textarea
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="3"
+              >
+            <v-autocomplete
+              v-model="serviceDetails.costumer"
+              :items="customerList"
+              item-text="name"
+              item-value="id"
+              outlined
+              dense
+              label="Contact"
+              @change="onChangeFromCustomer"
+              return-object
+            ></v-autocomplete>
+
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+            <v-autocomplete
+              v-model="serviceDetails.contact"
+              :items="contactList"
+              item-text="name"
+              item-value="id"
+              outlined
+              dense
+              label="Contact"
+              return-object
+            ></v-autocomplete>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-if="serviceDetails.contact"
+                  v-model="serviceDetails.contact.phone"
+                  :disabled="isUpdating"
+                  outlined
+                  dense
+                  color="blue-grey lighten-2"
+                  label="Phone"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-if="serviceDetails.contact"
+                  v-model="serviceDetails.contact.email"
+                  :disabled="isUpdating"
+                  outlined
+                  dense
+                  color="blue-grey lighten-2"
+                  label="Email"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <h2 class="text-h6">
+              End customer contact person
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="3"
+              >
+            <v-autocomplete
+              v-if="serviceDetails.costumer"
+              v-model="customerSelected"
+              :items="customerList"
+              item-text="name"
+              item-value="id"
+              outlined
+              dense
+              label="Contact"
+              @change="onChangeEndFromCustomer"
+              return-object
+            ></v-autocomplete>
+
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+            <v-autocomplete
+              v-model="serviceDetails.contacting"
+              :items="endContactList"
+              item-text="name"
+              item-value="id"
+              outlined
+              dense
+              label="Contact"
+              return-object
+            ></v-autocomplete>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-if="serviceDetails.contacting"
+                  v-model="serviceDetails.contacting.phone"
+                  :disabled="isUpdating"
+                  outlined
+                  dense
+                  color="blue-grey lighten-2"
+                  label="Phone"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-if="serviceDetails.contacting"
+                  v-model="serviceDetails.contacting.email"
+                  :disabled="true"
+                  outlined
+                  dense
+                  color="blue-grey lighten-2"
+                  label="Email"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <h2 class="text-h6">
+              Address intallation
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="5"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Address"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="2"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="City"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="2"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Zip"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Province"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <h2 class="text-h6">
+              Address intallation
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="2"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Service date"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="2"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Start time"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="2"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Expected hours"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Responsible account"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                  v-model="contact[0].costumer"
+                  :disabled="isUpdating"
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Technical responsible"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <h2 class="text-h6">
+              Address intallation
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="12"
+              >
+                <v-textarea
+                  v-model="contact[0].costumer"
+                  auto-grow
+                  filled
+                  color="blue-grey lighten-2"
+                  label="Description"
+                  rows="4"
+                  row-height="30"
+                  counter
+                ></v-textarea>            
+              </v-col>
+            </v-row>
+            <h2 class="text-h6">
+              Service Incidents
+            </h2>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="9"
+              >
+              <h2 class="text-h6">
+                Issues Service
+              </h2>
+                <v-row>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-switch
                       v-model="contact[0].costumer"
-                      auto-grow
+                      label="Incidence"
+                      color="success"
+                      value="success"
+                      hide-details
+                    ></v-switch>      
+                  </v-col> 
+                  <v-col
+                    cols="12"
+                  >
+                    <v-textarea
+                        v-model="contact[0].costumer"
+                        auto-grow
+                        filled
+                        color="blue-grey lighten-2"
+                        label="Description"
+                        rows="4"
+                        row-height="36"
+                        counter
+                          ></v-textarea>        
+                  </v-col>             
+                </v-row>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+              <h2 class="text-h6">
+                Service finished
+              </h2>
+                <v-row>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-switch
+                      v-model="contact[0].costumer"
+                      label="Incidence"
+                      color="success"
+                      value="success"
+                      hide-details
+                    ></v-switch>      
+                  </v-col> 
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                      v-model="contact[0].costumer"
+                      :disabled="isUpdating"
                       filled
                       color="blue-grey lighten-2"
-                      label="Description"
-                      rows="4"
-                      row-height="36"
-                      counter
-                        ></v-textarea>        
-                </v-col>             
-              </v-row>
-            </v-col>
-            <v-col
-              cols="12"
-              md="3"
-            >
+                      label="Invested hours"
+                    ></v-text-field>     
+                  </v-col>
+                  <v-col
+                    cols="12"
+                  >
+                    <v-text-field
+                      v-model="contact[0].costumer"
+                      :disabled="isUpdating"
+                      filled
+                      color="blue-grey lighten-2"
+                      label="End date"
+                    ></v-text-field>     
+                  </v-col>               
+                </v-row>
+
+
+              </v-col>
+            </v-row>
+            <v-divider class="my-2"></v-divider>
+          </v-container>
+        </v-form>
+
+        <v-card-actions >
+          <v-container>
             <h2 class="text-h6">
-              Service finished
+              Signature
             </h2>
-              <v-row>
-                <v-col
-                  cols="12"
-                >
-                  <v-switch
-                    v-model="contact[0].costumer"
-                    label="Incidence"
-                    color="success"
-                    value="success"
-                    hide-details
-                  ></v-switch>      
-                </v-col> 
-                <v-col
-                  cols="12"
-                >
-                  <v-text-field
-                    v-model="contact[0].costumer"
-                    :disabled="isUpdating"
-                    filled
-                    color="blue-grey lighten-2"
-                    label="Invested hours"
-                  ></v-text-field>     
-                </v-col>
-                <v-col
-                  cols="12"
-                >
-                  <v-text-field
-                    v-model="contact[0].costumer"
-                    :disabled="isUpdating"
-                    filled
-                    color="blue-grey lighten-2"
-                    label="End date"
-                  ></v-text-field>     
-                </v-col>               
-              </v-row>
+            <v-divider class="my-2"></v-divider>
+            <v-row>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-checkbox
+                  v-model="contact[0].name"
+                  label="Technician ST"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-checkbox
+                  v-model="contact[0].name"
+                  label="Cordinator ST"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <v-checkbox
+                  v-model="contact[0].name"
+                  label="Responsible account"
+                  hide-details
+                ></v-checkbox>
+              </v-col>
+            </v-row>
+          </v-container>
+            <v-divider></v-divider>
+        </v-card-actions>
+      </v-card>
+    </v-container>
 
-
-            </v-col>
-          </v-row>
-          <v-divider class="my-2"></v-divider>
-        </v-container>
-      </v-form>
-
-      <v-card-actions >
-        <v-container>
-          <h2 class="text-h6">
-            Signature
-          </h2>
-          <v-divider class="my-2"></v-divider>
-          <v-row>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-checkbox
-                v-model="contact[0].name"
-                label="Technician ST"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-checkbox
-                v-model="contact[0].name"
-                label="Cordinator ST"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col
-              cols="12"
-              md="4"
-            >
-              <v-checkbox
-                v-model="contact[0].name"
-                label="Responsible account"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-          </v-row>
-        </v-container>
-
-         
-          <v-divider></v-divider>
-
-
-      </v-card-actions>
+    <v-container 
+      v-if="!enabled"
+      fill-height fluid>
+      <v-row align="center"
+          justify="center">
+     
+            <v-progress-circular
+              size="50"
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
       
-    </v-card>
-  </v-container>
+      </v-row>
+    </v-container>
 </v-app>
 </template>
 <script>
@@ -534,26 +570,43 @@
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         modal: false,
         menu2: false,
-
+        customerSelected:null,
+        enabled: false
       }
     },
     
     props:['serviceId'],
 
-    mounted(){
-      this.getService(this.serviceId)   
-      this.projects()
-      this.costumers()
+    created(){
+
+      this.getService(this.serviceId).then(()=>{
+        this.projects()
+        this.costumers().then(()=>{
+          this.contacts(this.serviceDetails.costumer.id).then(()=>{
+            this.costumerById(this.serviceDetails.contacting.customer_id).then(()=>{
+              this.customerSelected = this.endCustomer
+            }).then(()=>{
+              this.endContacts(this.serviceDetails.contacting.customer_id).finally(()=>(this.enabled=true))              
+            })
+          })
+        }) 
+
+      })
+
+     
     },
+
 
     computed: {
       ...mapGetters({
         serviceDetails: 'application/serviceDetails',
         allNotifications: 'application/notifications',
         projectList: 'application/projectList',
-        costumerList: 'application/customers'
-
-      })
+        customerList: 'application/customers',
+        endCustomer: 'application/endCustomer',
+        contactList:'application/contactList',
+        endContactList:'application/endContactList',
+      }),
     },
     watch: {
       isUpdating (val) {
@@ -568,7 +621,10 @@
         getService:'application/getService',
         addNotification: 'application/addNotification',
         projects: 'application/getProjects',
-        costumers: 'application/getCustomers'     
+        costumers: 'application/getCustomers',
+        costumerById: 'application/getCustomerById',
+        contacts: 'application/getContactsByCostumer',
+        endContacts: 'application/getEndContactsByCostumer',
       }),
 
       remove (item) {
@@ -576,11 +632,31 @@
         if (index >= 0) this.friends.splice(index, 1)
       },
 
+      onChangeFromCustomer(item){
+          this.contacts(item.id).then(()=>{
+            this.serviceDetails.contact = null
+          })
+      },
+
+      onChangeEndFromCustomer(item){
+          this.endContacts(item.id).then(()=>{
+            this.serviceDetails.contacting = null
+          })
+      },
+
       beforeRouteUpdate(to, from, next){
-          this.getService(to.params.serviceId);
-          next();
+          //this.getService(to.params.serviceId).then(()=>{
+
+            next();
+         // })
+
       }     
       
     },
   }
 </script>
+<style scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+</style>

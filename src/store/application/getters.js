@@ -14,4 +14,13 @@ export default {
     projectList(state){
         return state.projects;
     },
+    contactList(state){
+        return state.contacts
+    },
+    endContactList(state){
+        return state.endContacts
+    },
+    endCustomer(state){
+        return state.endCustomer
+    },
 }

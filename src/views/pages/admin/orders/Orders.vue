@@ -129,7 +129,7 @@
                     item-value="value"
                     label="Project"
                     @change="onChangeFrom"
-                          return-object
+                    return-object
                     >
                   </v-select>
                   </v-col>
@@ -324,7 +324,8 @@ import { mapActions, mapGetters } from 'vuex'
             createService: 'application/createService',
             importOrders : 'application/importOrders',   
             getService:'application/getService',
-            projects: 'application/getProjects'     
+            projects: 'application/getProjects',
+            costumers: 'application/getCustomers',     
             }),
 
         editItem (item) {
@@ -405,7 +406,9 @@ import { mapActions, mapGetters } from 'vuex'
                       })
                   });   
               }
-            this.close()
+            this.close(),
+            //load customers list
+            this.costumers()
         },
 
         uploadFileOrders(){
@@ -435,9 +438,9 @@ import { mapActions, mapGetters } from 'vuex'
         else return 'green'
       },
       routerGoService(item){
-        this.getService(item.service_id).then(() => {
+        //this.getService(item.service_id).then(() => {
           this.$router.push({ name: 'service', params: { serviceId:  item.service_id}}) 
-        })
+        //})
 
       },
 
