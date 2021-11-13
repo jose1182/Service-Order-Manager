@@ -7,5 +7,8 @@ export default {
     },
     listUsers(state){
         return state.listUsers;
+    },
+    allServiceUsers(state){
+        return state.users;
     }
 }

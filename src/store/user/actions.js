@@ -131,6 +131,20 @@ export default {
                 });  
         });
     },
+    ListUsers(context){
+        return new Promise((resolve, reject) => {
+            axios
+                .get('service-users')
+                .then((response) => {
+                    context.commit('setServiceUsers', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                });              
+        })
+    },
     allUsers(context){
         return new Promise((resolve, reject) => {
             axios

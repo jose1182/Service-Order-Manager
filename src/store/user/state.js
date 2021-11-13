@@ -1,5 +1,6 @@
 export default {
     isLoggedIn: false,
     userDetails: {},
-    listUsers: []
+    listUsers: [],
+    users: []
 }

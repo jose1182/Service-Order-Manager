@@ -8,5 +8,8 @@ export default {
     },
     setListUsers(state, payload){
         state.listUsers = payload;
+    },
+    setServiceUsers(state, payload){
+        state.users = payload;
     }
 }
