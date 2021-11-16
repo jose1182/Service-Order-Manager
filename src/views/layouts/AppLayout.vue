@@ -1,10 +1,12 @@
 <template>
   <v-main>
     <SidePanel/>
-    <v-toolbar 
+    <v-app-bar
+      app 
       mt5 
       flat
-      fixed>
+      fixed
+      >
       
       <v-toolbar-title>
         <span class="caption">Overview Dashboard></span><br>Tranding View
@@ -38,21 +40,25 @@
           </template>
 
           <v-list>
-            <v-list-item
-              v-for="n in 5"
-              :key="n"
-              @click="() => {}"
-            >
-              <v-list-item-title>Option {{ n }}</v-list-item-title>
-            </v-list-item>
+            <v-list-item     
+              v-for="(item, index) in menuItems"
+              :key="index"
+              @click="item.action && item.action()">
+                <v-list-item-icon>
+                    <v-icon text v-text="item.icon"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                </v-list-item-content>
+                </v-list-item> 
           </v-list>
         </v-menu>
       </v-app-bar>
-    </v-toolbar>
-    <v-divider></v-divider>
+    </v-app-bar>
+    <v-divider></v-divider> 
 
-   
-      <router-view/>
+    
+    <router-view/>
 
 
   </v-main>
@@ -64,6 +70,7 @@
 import { bus } from '../../main'
 import SidePanel from '../../components/SidePanel.vue'
 import DialogService from '../../components/dialog/DialogService.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AppLayout',
@@ -71,24 +78,57 @@ export default {
     SidePanel,
     DialogService
   },
-  data: () => ({
+  data: (e) => ({
      tab: null,
      text: 'center',
      fill: true,
       padding: 8,
       radius: 10,
-      value: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
       width: 2,
       lineCap: 'round',
       type: 'trend',
       autoLineWidth: false,
       fills: false,
+      menuItems: [
+      {
+        icon: 'mdi-logout',
+        text: "Logout",
+        action: () => e.logout() // invoke logout method here
+      }
+    ]
+
   }),
+
+  computed:{
+    ...mapGetters({
+      allNotifications: 'application/notifications'
+    }),
+  },
+
   methods:{
+    ...mapActions({
+      logoutUser: 'user/logoutUser',
+      addNotification: 'application/addNotification'
+    }),
     openDialogService(){
       console.log('testing dialog');
       bus.$emit('dialog', true);
-    }
+    },
+    logout(){
+      console.log('logout pulse');
+        this.logoutUser()
+        .then(() => {
+          return this.addNotification({
+            text: 'Logged out!',
+            show: true
+          })
+          .then(() => {
+            this.$router.push({name: 'login'});
+          })
+
+        })
+
+    },
   }
 }
 </script>

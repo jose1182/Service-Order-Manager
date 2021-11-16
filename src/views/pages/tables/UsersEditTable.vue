@@ -8,9 +8,11 @@
   >
     <template v-slot:top>
       <v-toolbar
+        dark
+        color="indigo darken-5"
         flat
       >
-        <v-toolbar-title>Users List</v-toolbar-title>
+        <v-toolbar-title>USERS</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-dialog
           v-model="dialog"

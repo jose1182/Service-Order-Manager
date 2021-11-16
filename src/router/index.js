@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/auth/Login.vue'
+import Home from '../views/pages/Home.vue'
 import Middlewares from '../middlewares/'
 import AuthLayout from '../views/layouts/AuthLayout.vue'
 import AppLayout from '../views/layouts/AppLayout.vue'
@@ -10,8 +10,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'login',
-    component: Login
+    name: 'home',
+    component: Home
   },
 
   {
@@ -53,8 +53,6 @@ const routes = [
       },
     ]
   },
-
-
   {
     path: '/',
     component: AppLayout,
@@ -91,7 +89,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "orders" */ '../views/pages/admin/orders/Orders.vue'),
         meta:{
           middleware: [Middlewares.auth, Middlewares.checkPermissions],
-          permissions: ['view-technical-dashboard']
+          permissions: ['view-admin-dashboard']
         }
       },
       {
@@ -137,8 +135,8 @@ const routes = [
         }
       },
       {
-        path: '/customers',
-        name: 'customers',
+        path: '/costumers',
+        name: 'costumers',
         props: true,
         component: () => import(/* webpackChunkName: "customers" */ '../views/pages/admin/costumers/Customers.vue'),
         meta:{
@@ -147,8 +145,9 @@ const routes = [
         }
       },
     ]
-  }
-
+  },
+  // otherwise redirect to home
+  { path: '*', redirect: '/' }
 
 ]
 

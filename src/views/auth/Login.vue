@@ -14,11 +14,11 @@
             >
                 <v-card class="elevation-12">
                 <v-toolbar
-                    color="primary"
+                    color="deep-purple darken-4"
                     dark
                     flat
                 >
-                    <v-toolbar-title>Login form</v-toolbar-title>
+                    <v-toolbar-title>Service App</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
@@ -41,12 +41,24 @@
                         type="password"
                         v-model="user.password"
                     ></v-text-field>
+                    <v-row justify="center">
+                    <a
+                    href="forgot-password"
+                    class="subheading mx-3 grey--text"
+                    >
+                    Forgot password?
+                    </a>
+                    </v-row>
                     </v-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="loginUser">Login</v-btn>
+                    <v-btn block dark color="deep-purple darken-4" @click="loginUser">Login</v-btn>
                 </v-card-actions>
+                    <v-row justify="center" class="my-2">
+                        <p>Don't have an account?</p>
+                        <a href="register" class="subheading mx-3">Sign up</a>
+                    </v-row>
                 </v-card>
             </v-col>
             </v-row>

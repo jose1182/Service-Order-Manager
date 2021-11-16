@@ -8,9 +8,11 @@
   >
     <template v-slot:top>
       <v-toolbar
+        dark
+        color="indigo darken-5"
         flat
       >
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-toolbar-title>USERS</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset

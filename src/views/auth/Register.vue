@@ -14,11 +14,11 @@
             >
                 <v-card class="elevation-12">
                 <v-toolbar
-                    color="primary"
+                    color="deep-purple darken-4"
                     dark
                     flat
                 >
-                    <v-toolbar-title>Register form</v-toolbar-title>
+                    <v-toolbar-title>Service App</v-toolbar-title>
                     <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
@@ -61,7 +61,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="registerUser" >Register</v-btn>
+                    <v-btn block dark color="deep-purple darken-4" @click="registerUser" >Register</v-btn>
                 </v-card-actions>
                 </v-card>
             </v-col>

@@ -216,10 +216,10 @@ export default {
         });
     },
 
-    getCustomerById(context, payLoad){
+    getCostumerById(context, payLoad){
         return new Promise((resolve, reject) => {
             axios
-                .get(`get-customer/${payLoad}`)
+                .get(`get-costumer/${payLoad}`)
                 .then((response) => {
                     console.log(response.data)
                     context.commit('setEndCustomer', response.data);
@@ -229,7 +229,23 @@ export default {
                     reject(error);
                 });  
         });
-    }
-
+    },
+    updateServiceDetails(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('update-service', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
 
 }

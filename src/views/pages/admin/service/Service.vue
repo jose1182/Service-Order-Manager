@@ -19,6 +19,7 @@
           Order Service
         </v-toolbar-title>
         <v-spacer></v-spacer>
+    <v-btn color="primary" @click="changeService">Save</v-btn>
         <v-btn
           color="purple darken-3"
           fab
@@ -98,9 +99,10 @@
                 outlined
                 dense
                 item-text="name"
-                item-value="value"
+                item-value="id"
                 label="Select Project"
                 color="blue-grey lighten-2"
+                 return-object
                 >
               </v-select>
             
@@ -193,7 +195,7 @@
                 md="3"
               >
             <v-autocomplete
-              v-model="customerSelected"
+              v-model="service.endCostumer"
               :items="customerList"
               item-text="name"
               item-value="id"
@@ -210,7 +212,7 @@
                 md="3"
               >
             <v-autocomplete
-              v-model="service.contacting"
+              v-model="service.endContact"
               :items="endContactList"
               item-text="name"
               item-value="id"
@@ -225,7 +227,7 @@
                 md="3"
               >
                 <v-text-field
-                  v-model="service.contacting.phone"
+                  v-model="service.endContact.phone"
                   :disabled="isUpdating"
                   outlined
                   dense
@@ -238,7 +240,7 @@
                 md="3"
               >
                 <v-text-field
-                  v-model="service.contacting.email"
+                  v-model="service.endContact.email"
                   :disabled="true"
                   outlined
                   dense
@@ -496,8 +498,9 @@
                   >
                     <v-switch
                       v-model="service.isFinished"
-                      label="Incidence"
+                      label="Finished"
                       color="success"
+                      @change="change(service.isFinished)"
                       hide-details
                     ></v-switch>      
                   </v-col> 
@@ -576,7 +579,6 @@
         </v-card-actions>
       </v-card>
     </v-container>
-{{ service }}
     <v-container 
       v-if="!enabled"
       fill-height fluid>
@@ -610,6 +612,7 @@
         customerSelected:null,
         enabled: false,
         service:{
+            id:'',
             order_service: '',
             issue_date:'',
             order_details:'',
@@ -621,7 +624,13 @@
               phone:'',
               email:''
             },
-            contacting:{
+            endCostumer:{
+              id:'',
+              code:'',
+              name:'',
+              phone:''
+            },
+            endContact:{
               id:'',
               name:'',
               phone:'',
@@ -662,6 +671,7 @@
       this.projects();
       this.costumers();
       this.getService(this.serviceId).then(()=>{
+        this.service.id = this.serviceDetails.id;
         this.service.order_service =  this.serviceDetails.order_service;
         this.service.issue_date = this.serviceDetails.issue_date;
         this.service.costumer = this.serviceDetails.costumer;
@@ -673,7 +683,7 @@
         this.service.responsible = this.serviceDetails.responsible;
         this.service.technician = this.serviceDetails.technician;
         this.service.description =  this.serviceDetails.description;
-        this.service.isFinished = this.serviceDetails.isIncidence;
+        this.service.isFinished = this.serviceDetails.isFinished;
         this.service.isCheckedByTechnician = this.serviceDetails.isCheckedByTechnician;
         this.service.isCheckedByCoordinator = this.serviceDetails.isCheckedByCoordinator;
         this.service.isCheckedByAccount = this.serviceDetails.isCheckedByAccount;
@@ -689,16 +699,13 @@
           
         }        
 
-        if(this.serviceDetails.contacting){
-          this.costumerById(this.serviceDetails.contacting.customer_id)
-          this.customerSelected = this.endCustomer
-       
+        if(this.serviceDetails.endCostumer){
+          this.service.endCostumer = this.serviceDetails.endCostumer
         }
         
-        if(this.serviceDetails.contacting){
-          this.endContacts(this.serviceDetails.contacting.customer_id)
-          this.service.contacting = this.serviceDetails.contacting;
-        
+        if(this.serviceDetails.endContact){
+          this.endContacts(this.serviceDetails.endContact.costumer_id)
+          this.service.endContact = this.serviceDetails.endContact;
         }
       }).finally(()=>{
         this.enabled=true
@@ -734,6 +741,7 @@
           setTimeout(() => (this.isUpdating = false), 3000)
         }
       }
+
     },
 
     methods: {
@@ -742,10 +750,11 @@
         addNotification: 'application/addNotification',
         projects: 'application/getProjects',
         costumers: 'application/getCustomers',
-        costumerById: 'application/getCustomerById',
+        costumerById: 'application/getCostumerById',
         contacts: 'application/getContactsByCostumer',
         endContacts: 'application/getEndContactsByCostumer',
         getUsers: 'user/ListUsers',
+        updateServiceDetails: 'application/updateServiceDetails',
       }),
 
       remove (item) {
@@ -755,14 +764,44 @@
 
       onChangeFromCustomer(item){
           this.contacts(item.id).then(()=>{
-            this.service.contact = null
+            this.service.contact = {
+              costumer_id: null,
+              email: '',
+              id: null,
+              name: '',
+              phone: ''
+            }
           })
       },
 
       onChangeEndFromCustomer(item){
           this.endContacts(item.id).then(()=>{
-            this.service.contacting = null
+            this.service.endContact = {
+              customer_id: null,
+              email: '',
+              id: null,
+              name: '',
+              phone: ''              
+            }
           })
+      },
+
+      changeService(){
+
+        //Check validate form
+        this.updateServiceDetails(this.service)
+        .then(()=>{
+          this.addNotification({
+              text: 'Service details Change!',
+              show: true
+          })
+        })
+        .catch(()=>{
+          this.addNotification({
+              text: 'Fail to chnage details service!',
+              show: true
+          })
+        })
       },
 
       beforeRouteUpdate(to, from, next){
@@ -771,9 +810,15 @@
             next();
          // })
 
-      }     
-      
-    },
+      },     
+
+      change(newValue){
+          this.service.end_date = null;
+          if(newValue){
+            this.service.end_date = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+          }
+      }
+    }
   }
 </script>
 <style scoped>

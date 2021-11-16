@@ -1,6 +1,5 @@
 <template>
-    <v-main>
-        <h1>Auth Laoyout</h1>
+    <v-main class="grey lighten-4">
         <router-view></router-view>
     </v-main>
 </template>
@@ -10,3 +9,6 @@ export default {
     
 }
 </script>
+<style scoped>
+
+</style>
