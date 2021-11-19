@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
       app
-      color="indigo darken-5"
+      color="deep-purple darken-2"
       dark
       v-model="drawer"
       :mini-variant.sync="mini"
@@ -104,7 +104,6 @@ export default {
 
     },
     menuItems(item){
-      console.log(item);
         this.$router.push(item);
     }
   }

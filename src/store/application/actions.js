@@ -156,6 +156,74 @@ export default {
                 });  
         });
     },
+    //
+    getContacts(context){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .get('list-contacts')
+                .then((response) => {
+                    context.commit('setListContacts', response.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                }); 
+        });
+    },
+    createContact(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('create-contact', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        context.dispatch('getContacts').then(() => resolve(response));
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    updateContact(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('update-contact', payLoad)
+                .then((response) => {
+                    if (response.data.success) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    deleteContact(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`delete-contact/${payLoad}`)
+                .then((response) => {
+                    if (response.data.success) {
+                        context.dispatch('getContacts').then(() => resolve(response));
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+
     getService(context, payLoad){
         
         return new Promise((resolve, reject) => {
@@ -192,7 +260,7 @@ export default {
                 .get(`list-contactsId/${payLoad}`)
                 .then((response) => {
                     console.log(response.data)
-                    context.commit('setListContacts', response.data);
+                    context.commit('setListOrderContacts', response.data);
                     resolve(response);
                 })
                 .catch((error) => {

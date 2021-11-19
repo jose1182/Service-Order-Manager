@@ -102,7 +102,7 @@
                 item-value="id"
                 label="Select Project"
                 color="blue-grey lighten-2"
-                 return-object
+                return-object
                 >
               </v-select>
             
@@ -149,7 +149,7 @@
               >
             <v-autocomplete
               v-model="service.contact"
-              :items="contactList"
+              :items="orderContactList"
               item-text="name"
               item-value="id"
               outlined
@@ -616,7 +616,10 @@
             order_service: '',
             issue_date:'',
             order_details:'',
-            project:'',
+            project: {
+              'id': null,
+              'name': ''
+            },
             costumer:'',
             contact:{
               id:'',
@@ -695,7 +698,7 @@
 
         if(this.service.costumer.id){
           this.contacts(this.service.costumer.id)
-          this.service.contact = this.serviceDetails.contact? this.serviceDetails.contact: this.service.contact;
+          this.service.contact = this.serviceDetails.contact;
           
         }        
 
@@ -730,7 +733,7 @@
         projectList: 'application/projectList',
         customerList: 'application/customers',
         endCustomer: 'application/endCustomer',
-        contactList:'application/contactList',
+        orderContactList:'application/orderContactList',
         endContactList:'application/endContactList',
         allServiceUsers: 'user/allServiceUsers',
       }),

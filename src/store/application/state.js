@@ -5,6 +5,7 @@ export default {
     projects:[],
     serviceDetails: {},
     contacts: [],
+    orderContacts: [],
     endContacts: [],
     endCustomer: [],
 }

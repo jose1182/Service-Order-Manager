@@ -1,7 +1,7 @@
 <template>
         <v-container
-            class="fill-height"
             fluid
+            mt-5
         >
             <v-row
             align="center"
@@ -12,15 +12,7 @@
                 sm="8"
                 md="4"
             >
-                <v-card class="elevation-12">
-                <v-toolbar
-                    color="deep-purple darken-4"
-                    dark
-                    flat
-                >
-                    <v-toolbar-title>Service App</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                </v-toolbar>
+                <v-card class="elevation-12 grey lighten-3">
                 <v-card-text>
                     <v-form ref="loginForm">
                     <v-text-field
@@ -53,7 +45,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn block dark color="deep-purple darken-4" @click="loginUser">Login</v-btn>
+                    <v-btn block dark color="deep-purple darken-2" @click="loginUser">Login</v-btn>
                 </v-card-actions>
                     <v-row justify="center" class="my-2">
                         <p>Don't have an account?</p>

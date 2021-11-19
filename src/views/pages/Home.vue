@@ -1,7 +1,7 @@
 <template>
-  <v-app class="deep-purple darken-4">
+  <v-app class="deep-purple darken-2">
     <v-container>
-      <v-toolbar fixed dark flat class="deep-purple darken-4" >
+      <v-toolbar fixed dark flat class="deep-purple darken-2" >
         <span class="hidden-sm-and-up">
           <v-toolbar-side-icon @click="sidebar = !sidebar">
           </v-toolbar-side-icon>
@@ -33,13 +33,13 @@
     <v-container fluid mt-5>
       <v-layout row wrap>
         <v-flex xs12 sm6 offset-sm3 mt-3>
-          <h1 class="big text-center white--text font-weight-light">
+          <h1 class="text-center white--text font-weight-light">
             Help your team do a better job<br>
             with Services App
           </h1>
         </v-flex>
         <v-flex xs12 class="text-center" mt-5>
-          <h3 class="white--text font-weight-light">This application is developed for Leoni's technical service team</h3>
+          <h2 class="white--text font-weight-light">This application is developed for Leoni's technical service team</h2>
         </v-flex>
         <v-flex xs12 sm6 offset-sm3 class="text-center" mt-5>
           <v-btn color="error" x-large to="/register">Sign Up</v-btn>
@@ -72,7 +72,7 @@ export default {
 <style scoped>
 
   h1{
-    font-size: 3em;
+    font-size: 3.75em;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
 

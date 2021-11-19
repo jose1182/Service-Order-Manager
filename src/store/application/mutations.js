@@ -20,6 +20,9 @@ export default {
     setListContacts(state, payload){
         state.contacts = payload;
     },
+    setListOrderContacts(state, payload){
+        state.orderContacts = payload;
+    },
     setListEndContacts(state, payload){
         state.endContacts = payload;
     },

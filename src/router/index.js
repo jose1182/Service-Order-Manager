@@ -144,6 +144,15 @@ const routes = [
           permissions: ['view-admin-dashboard']
         }
       },
+      {
+        path:'/contacts',
+        name:'contacts',
+        component: ()=> import(/*webpackChunkName: "contacts" */ '../views/pages/admin/contacts/Contacts.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions:['view-admin-dashboard']
+        } 
+      }
     ]
   },
   // otherwise redirect to home
