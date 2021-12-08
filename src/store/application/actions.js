@@ -74,22 +74,6 @@ export default {
                 });  
         });
     },
-    createService(context, payLoad){
-        
-        return new Promise((resolve, reject) => {
-            axios
-                .post('create-service', payLoad)
-                .then((response) => {
-                    if (response.data) {
-                        resolve(response);
-                    } else {
-                        reject(response);
-                    }                })
-                .catch((error) => {
-                    reject(error);
-                });  
-        });
-    },
     getCustomers(context){
         
         return new Promise((resolve, reject) => {
@@ -223,22 +207,6 @@ export default {
                 });  
         });
     },
-
-    getService(context, payLoad){
-        
-        return new Promise((resolve, reject) => {
-            axios
-                .get(`show-service/${payLoad}`)
-                .then((response) => {
-                    context.commit('setServiceDetails', response.data.data);
-                    resolve(response);
-                })
-                .catch((error) => {
-                    reject(error);
-                });  
-        });
-    },
-
     getProjects(context){
         return new Promise((resolve, reject) => {
             axios
@@ -298,6 +266,35 @@ export default {
                 });  
         });
     },
+    getServiceDetail(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`show-service/${payLoad}`)
+                .then((response) => {
+                    context.commit('setServiceDetails', response.data.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    getServices(context){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .get('list-services')
+                .then((response) => {
+                    context.commit('setListServices', response.data.data);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    reject(error);
+                }); 
+        });
+    },
     updateServiceDetails(context, payLoad){
         
         return new Promise((resolve, reject) => {
@@ -306,6 +303,39 @@ export default {
                 .then((response) => {
                     if (response.data.success) {
                         resolve(response);
+                    } else {
+                        reject(response);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    createService(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post('create-service', payLoad)
+                .then((response) => {
+                    if (response.data) {
+                        resolve(response);
+                    } else {
+                        reject(response);
+                    }                })
+                .catch((error) => {
+                    reject(error);
+                });  
+        });
+    },
+    deleteService(context, payLoad){
+        
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`delete-service/${payLoad}`)
+                .then((response) => {
+                    if (response.data.success) {
+                        context.dispatch('getServices').then(() => resolve(response));
                     } else {
                         reject(response);
                     }

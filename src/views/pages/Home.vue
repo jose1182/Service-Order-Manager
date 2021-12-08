@@ -1,7 +1,7 @@
 <template>
-  <v-app class="deep-purple darken-2">
+  <v-app class="deep-purple darken-1">
     <v-container>
-      <v-toolbar fixed dark flat class="deep-purple darken-2" >
+      <v-toolbar fixed dark flat class="deep-purple darken-1" >
         <span class="hidden-sm-and-up">
           <v-toolbar-side-icon @click="sidebar = !sidebar">
           </v-toolbar-side-icon>

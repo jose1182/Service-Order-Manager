@@ -1,57 +1,43 @@
 <template>
-<v-app>
+<v-container>
     <v-container
       class="spacing-playground pa-md-12 mx-lg-auto"
       > 
       <v-card
         v-if="enabled"
-        color="lime lighten-5"
+        color="theme--light"
         :loading="isUpdating"
       >
 
       <v-toolbar
         flat
-        color="light-green"
+        color="success"
         dark
+        class="mx-3"
       >
         <v-icon>mdi-form-select</v-icon>
         <v-toolbar-title class="font-weight-light">
           Order Service
         </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn
-          color="purple darken-3"
-          fab
-          small
-          @click="isUpdating = !isUpdating"
-        >
-          <v-icon v-if="isUpdating">
-            mdi-close
-          </v-icon>
-          <v-icon v-else>
-            mdi-pencil
-          </v-icon>
-        </v-btn>
+
       </v-toolbar>
 
         <v-form>
           <v-container
             fluid
           >
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2 text-center">
               Order
             </h2>
-            <v-divider class="my-2"></v-divider>
+ 
             <v-row>
               <v-col
                 cols="12"
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.order_details"
-                  v-model="serviceDetails.order_details.order_service"
+                  v-model="service.order_service"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   label="Service order"
                 ></v-text-field>
@@ -62,7 +48,6 @@
               >
 
                 <v-menu
-                  v-if="serviceDetails.issue_date"
                   v-model="menu2"
                   :close-on-content-click="false"
                   :nudge-right="40"
@@ -72,9 +57,8 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="serviceDetails.issue_date"
+                      v-model="service.issue_date"
                       :disabled="isUpdating"
-                      outlined
                       dense
                       label="Issue date"
                       prepend-icon="mdi-calendar"
@@ -85,7 +69,7 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="serviceDetails.issue_date"
+                    v-model="service.issue_date"
                     @input="menu2 = false"
                   ></v-date-picker>
                 </v-menu>
@@ -95,15 +79,14 @@
                 md="3"
               >
               <v-select
-                v-if="serviceDetails.project"
-                v-model="serviceDetails.project.name"
+                v-model="service.project"
                 :items="projectList"
-                outlined
                 dense
                 item-text="name"
-                item-value="value"
+                item-value="id"
                 label="Select Project"
                 color="blue-grey lighten-2"
+                return-object
                 >
               </v-select>
             
@@ -113,31 +96,28 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.order_details"
-                  v-model="serviceDetails.order_details.pev"
+                  v-model="service.order_details.pev"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Pev"
                 ></v-text-field>
               </v-col>
             </v-row>
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2">
               Customer contact person
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
                 md="3"
               >
             <v-autocomplete
-              v-model="serviceDetails.costumer"
+              v-model="service.costumer"
               :items="customerList"
               item-text="name"
               item-value="id"
-              outlined
               dense
               label="Contact"
               @change="onChangeFromCustomer"
@@ -150,11 +130,10 @@
                 md="3"
               >
             <v-autocomplete
-              v-model="serviceDetails.contact"
-              :items="contactList"
+              v-model="service.contact"
+              :items="orderContactList"
               item-text="name"
               item-value="id"
-              outlined
               dense
               label="Contact"
               return-object
@@ -165,10 +144,8 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.contact"
-                  v-model="serviceDetails.contact.phone"
+                  v-model="service.contact.phone"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Phone"
@@ -179,32 +156,28 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.contact"
-                  v-model="serviceDetails.contact.email"
+                  v-model="service.contact.email"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Email"
                 ></v-text-field>
               </v-col>
             </v-row>
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2">
               End customer contact person
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
                 md="3"
               >
             <v-autocomplete
-              v-if="serviceDetails.costumer"
-              v-model="customerSelected"
+              v-model="service.endCostumer"
               :items="customerList"
               item-text="name"
               item-value="id"
-              outlined
               dense
               label="Contact"
               @change="onChangeEndFromCustomer"
@@ -217,11 +190,10 @@
                 md="3"
               >
             <v-autocomplete
-              v-model="serviceDetails.contacting"
+              v-model="service.endContact"
               :items="endContactList"
               item-text="name"
               item-value="id"
-              outlined
               dense
               label="Contact"
               return-object
@@ -232,10 +204,8 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.contacting"
-                  v-model="serviceDetails.contacting.phone"
+                  v-model="service.endContact.phone"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Phone"
@@ -246,30 +216,26 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.contacting"
-                  v-model="serviceDetails.contacting.email"
+                  v-model="service.endContact.email"
                   :disabled="true"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Email"
                 ></v-text-field>
               </v-col>
             </v-row>
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2">
               Address intallation
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
                 md="5"
               >
                 <v-text-field
-                  v-if="serviceDetails.address"
-                  v-model="serviceDetails.address.street"
+                  v-model="service.address.street"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Address"
@@ -280,10 +246,8 @@
                 md="2"
               >
                 <v-text-field
-                  v-if="serviceDetails.address"
-                  v-model="serviceDetails.address.city"
+                  v-model="service.address.city"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="City"
@@ -294,10 +258,8 @@
                 md="2"
               >
                 <v-text-field
-                  v-if="serviceDetails.address"
-                  v-model="serviceDetails.address.zip"
+                  v-model="service.address.zip"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Zip"
@@ -308,27 +270,24 @@
                 md="3"
               >
                 <v-text-field
-                  v-if="serviceDetails.address"
-                  v-model="serviceDetails.address.province"
+                  v-model="service.address.province"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Province"
                 ></v-text-field>
               </v-col>
             </v-row>
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2">
               Service
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
                 md="2"
               >
                 <v-menu
-                  v-if="serviceDetails.service_date"
                   v-model="menu3"
                   :close-on-content-click="false"
                   :nudge-right="40"
@@ -338,9 +297,8 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="serviceDetails.issue_date"
+                      v-model="service.service_date"
                       :disabled="isUpdating"
-                      outlined
                       dense
                       label="Service date"
                       prepend-icon="mdi-calendar"
@@ -351,7 +309,7 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="serviceDetails.issue_date"
+                    v-model="service.service_date"
                     @input="menu3 = false"
                   ></v-date-picker>
                 </v-menu>
@@ -365,7 +323,7 @@
                   v-model="menu4"
                   :close-on-content-click="false"
                   :nudge-right="40"
-                  :return-value.sync="serviceDetails.start_time"
+                  :return-value.sync="service.start_time"
                   transition="scale-transition"
                   offset-y
                   max-width="290px"
@@ -373,10 +331,9 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="serviceDetails.start_time"
+                      v-model="service.start_time"
                       label="Start time"
                       prepend-icon="mdi-clock-time-four-outline"
-                      outlined
                       dense
                       color="blue-grey lighten-2"
                       readonly
@@ -397,9 +354,8 @@
                 md="2"
               >
                 <v-text-field
-                  v-model="serviceDetails.expected_hours"
+                  v-model="service.expected_hours"
                   :disabled="isUpdating"
-                  outlined
                   dense
                   color="blue-grey lighten-2"
                   label="Expected hours"
@@ -410,12 +366,10 @@
                 md="3"
               >
                 <v-autocomplete
-                  v-if="serviceDetails.responsible"
-                  v-model="serviceDetails.responsible"
+                  v-model="service.responsible"
                   :items="allServiceUsers"
                   item-text="name"
                   item-value="id"
-                  outlined
                   dense
                   label="Responsible account"
                   return-object
@@ -426,12 +380,10 @@
                 md="3"
               >
             <v-autocomplete
-              v-if="serviceDetails.technician"
-              v-model="serviceDetails.technician"
+              v-model="service.technician"
               :items="allServiceUsers"
               item-text="name"
               item-value="id"
-              outlined
               dense
               label="Technical"
               return-object
@@ -439,20 +391,18 @@
               </v-col>
 
             </v-row>
-            <h2 class="text-h6">
-              Address intallation
+            <h2 class="text-h6 mb-2">
+              Description
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
                 md="12"
               >
                 <v-textarea
-                  v-model="serviceDetails.description"
+                  v-model="service.description"
                   auto-grow
-                  filled
-                  color="blue-grey lighten-2"
                   label="Description"
                   rows="4"
                   row-height="30"
@@ -460,10 +410,10 @@
                 ></v-textarea>            
               </v-col>
             </v-row>
-            <h2 class="text-h6">
+            <h2 class="text-h6 mb-2">
               Service Incidents
             </h2>
-            <v-divider class="my-2"></v-divider>
+
             <v-row>
               <v-col
                 cols="12"
@@ -477,7 +427,7 @@
                     cols="12"
                   >
                     <v-switch
-                      v-model="serviceDetails.isIncidence"
+                      v-model="service.isIncidence"
                       label="Incidence"
                       color="success"
                       hide-details
@@ -487,10 +437,8 @@
                     cols="12"
                   >
                     <v-textarea
-                        v-model="contact[0].costumer"
+                        v-model="todo"
                         auto-grow
-                        filled
-                        color="blue-grey lighten-2"
                         label="Description"
                         rows="4"
                         row-height="36"
@@ -503,7 +451,7 @@
                 cols="12"
                 md="3"
               >
-              <h2 class="text-h6">
+              <h2 class="text-h6 mb-2">
                 Service finished
               </h2>
                 <v-row>
@@ -511,9 +459,10 @@
                     cols="12"
                   >
                     <v-switch
-                      v-model="serviceDetails.isFinished"
-                      label="Incidence"
+                      v-model="service.isFinished"
+                      label="Finished"
                       color="success"
+                      @change="change(service.isFinished)"
                       hide-details
                     ></v-switch>      
                   </v-col> 
@@ -521,7 +470,7 @@
                     cols="12"
                   >
                     <v-text-field
-                      v-model="serviceDetails.invested_hours"
+                      v-model="service.invested_hours"
                       :disabled="isUpdating"
                       filled
                       color="blue-grey lighten-2"
@@ -532,7 +481,7 @@
                     cols="12"
                   >
                     <v-text-field
-                      v-model="serviceDetails.end_date"
+                      v-model="service.end_date"
                       :disabled="isUpdating"
                       filled
                       color="blue-grey lighten-2"
@@ -542,12 +491,6 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-divider class="my-2"></v-divider>
-          </v-container>
-        </v-form>
-
-        <v-card-actions >
-          <v-container>
             <h2 class="text-h6">
               Signature
             </h2>
@@ -558,7 +501,7 @@
                 md="4"
               >
                 <v-checkbox
-                  v-model="serviceDetails.isCheckedByTechnician"
+                  v-model="service.isCheckedByTechnician"
                   label="Technician ST"
                   color="success"
                   hide-details
@@ -569,7 +512,7 @@
                 md="4"
               >
                 <v-checkbox
-                  v-model="serviceDetails.isCheckedByCoordinator"
+                  v-model="service.isCheckedByCoordinator"
                   label="Cordinator ST"
                   color="success"
                   hide-details
@@ -580,20 +523,29 @@
                 md="4"
               >
                 <v-checkbox
-                  v-model="serviceDetails.isCheckedByAccount"
+                  v-model="service.isCheckedByAccount"
                   label="Responsible account"
                   color="success"
                   hide-details
                 ></v-checkbox>
               </v-col>
             </v-row>
+
+            <v-divider class="my-2"></v-divider>
           </v-container>
-            <v-divider></v-divider>
+        </v-form>
+
+        <v-card-actions >
+              <v-col
+                cols="12"
+                class="text-right"
+              >
+                <v-btn color="success" @click="changeService">UPDATE SERVICE</v-btn>
+              </v-col>
+        
         </v-card-actions>
       </v-card>
-      {{ serviceDetails }}
     </v-container>
-
     <v-container 
       v-if="!enabled"
       fill-height fluid>
@@ -607,7 +559,7 @@
         ></v-progress-circular>
       </v-row>
     </v-container>
-</v-app>
+</v-container>
 </template>
 <script>
 
@@ -626,18 +578,46 @@
         time: null,
         customerSelected:null,
         enabled: false,
-        service :{
+        service:{
+            id:'',
             order_service: '',
             issue_date:'',
             order_details:'',
-            project:'',
+            project: {
+              'id': null,
+              'name': ''
+            },
             costumer:'',
-            contact:'',
-            contacting:'',
+            contact:{
+              id:'',
+              name:'',
+              phone:'',
+              email:''
+            },
+            endCostumer:{
+              id:'',
+              code:'',
+              name:'',
+              phone:''
+            },
+            endContact:{
+              id:'',
+              name:'',
+              phone:'',
+              email:''
+            },
             user:'',
             technician:'',
             responsible:'',
-            address:'',
+            address:{
+              city: '',
+              customer_id: '',
+              id: '',
+              province: '',
+              street: '',
+              zip: ''
+
+            },
             service_date:'',
             start_time:'',
             expected_hours:'',
@@ -649,18 +629,59 @@
             isCheckedByTechnician:'',
             isCheckedByCoordinator:'',
             isCheckedByAccount:'',          
-        }
+        },
+        todo : 'not incluede in db'
       }
     },
     
     props:['serviceId'],
 
     created(){
-
       this.getUsers();
-      this.projects()
-      this.getService(this.serviceId).then(()=>{
-       this.enabled = true;
+      this.projects();
+      this.costumers();
+      this.getServiceDetail(this.serviceId).then(()=>{
+        this.service.id = this.serviceDetails.id;
+        this.service.order_service =  this.serviceDetails.order_service;
+        this.service.issue_date = this.serviceDetails.issue_date;
+        this.service.costumer = this.serviceDetails.costumer;
+        this.service.order_details = this.serviceDetails.order_details;
+        this.service.project = this.serviceDetails.project;
+        this.service.address = this.serviceDetails.address? this.serviceDetails.address: this.service.address;
+        this.service.start_time =  this.serviceDetails.start_time;
+        this.service.expected_hours = this.serviceDetails.expected_hours;
+        this.service.responsible = this.serviceDetails.responsible;
+        this.service.technician = this.serviceDetails.technician;
+        this.service.description =  this.serviceDetails.description;
+        this.service.isFinished = this.serviceDetails.isFinished;
+        this.service.isCheckedByTechnician = this.serviceDetails.isCheckedByTechnician;
+        this.service.isCheckedByCoordinator = this.serviceDetails.isCheckedByCoordinator;
+        this.service.isCheckedByAccount = this.serviceDetails.isCheckedByAccount;
+        this.service.invested_hours = this.serviceDetails.invested_hours;
+        this.service.end_date = this.serviceDetails.end_date;
+        this.service.isIncidence = this.serviceDetails.isIncidence;
+        this.service.service_date = this.serviceDetails.service_date;
+
+
+        if(this.service.costumer.id){
+          
+          this.contacts(this.service.costumer.id)
+
+          if(this.serviceDetails.contact){
+            this.service.contact = this.serviceDetails.contact;
+          }
+        }        
+
+        if(this.serviceDetails.endCostumer){
+          this.service.endCostumer = this.serviceDetails.endCostumer
+        }
+        
+        if(this.serviceDetails.endContact){
+          this.endContacts(this.serviceDetails.endContact.costumer_id)
+          this.service.endContact = this.serviceDetails.endContact;
+        }
+      }).finally(()=>{
+        this.enabled=true
       })
 /*         this.costumers().then(()=>{
           this.contacts(this.serviceDetails.costumer.id).then(()=>{
@@ -682,7 +703,7 @@
         projectList: 'application/projectList',
         customerList: 'application/customers',
         endCustomer: 'application/endCustomer',
-        contactList:'application/contactList',
+        orderContactList:'application/orderContactList',
         endContactList:'application/endContactList',
         allServiceUsers: 'user/allServiceUsers',
       }),
@@ -693,18 +714,20 @@
           setTimeout(() => (this.isUpdating = false), 3000)
         }
       }
+
     },
 
     methods: {
       ...mapActions({
-        getService:'application/getService',
+        getServiceDetail:'application/getServiceDetail',
         addNotification: 'application/addNotification',
         projects: 'application/getProjects',
         costumers: 'application/getCustomers',
-        costumerById: 'application/getCustomerById',
+        costumerById: 'application/getCostumerById',
         contacts: 'application/getContactsByCostumer',
         endContacts: 'application/getEndContactsByCostumer',
         getUsers: 'user/ListUsers',
+        updateServiceDetails: 'application/updateServiceDetails',
       }),
 
       remove (item) {
@@ -714,14 +737,44 @@
 
       onChangeFromCustomer(item){
           this.contacts(item.id).then(()=>{
-            this.serviceDetails.contact = null
+            this.service.contact = {
+              costumer_id: null,
+              email: '',
+              id: null,
+              name: '',
+              phone: ''
+            }
           })
       },
 
       onChangeEndFromCustomer(item){
           this.endContacts(item.id).then(()=>{
-            this.serviceDetails.contacting = null
+            this.service.endContact = {
+              customer_id: null,
+              email: '',
+              id: null,
+              name: '',
+              phone: ''              
+            }
           })
+      },
+
+      changeService(){
+
+        //Check validate form
+        this.updateServiceDetails(this.service)
+        .then(()=>{
+          this.addNotification({
+              text: 'Service details Change!',
+              show: true
+          })
+        })
+        .catch(()=>{
+          this.addNotification({
+              text: 'Fail to chnage details service!',
+              show: true
+          })
+        })
       },
 
       beforeRouteUpdate(to, from, next){
@@ -730,9 +783,15 @@
             next();
          // })
 
-      }     
-      
-    },
+      },     
+
+      change(newValue){
+          this.service.end_date = null;
+          if(newValue){
+            this.service.end_date = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10);
+          }
+      }
+    }
   }
 </script>
 <style scoped>

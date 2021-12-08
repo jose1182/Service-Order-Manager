@@ -12,7 +12,7 @@
                 sm="8"
                 md="4"
             >
-                <v-card class="elevation-12 grey lighten-3">
+                <v-card class="elevation-5 grey lighten-5">
 
                 <v-card-text>
                     <v-form ref="registerForm" :value="formValid">

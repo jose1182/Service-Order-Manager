@@ -1,10 +1,10 @@
 <template>
-<v-container class="m-5">
+<v-container fluid class="spacing-playground pa-6">
   <v-data-table
     :headers="headers"
     :items="contacts.data"
     sort-by="name"
-    class="elevation-1"
+    class="elevation-1 text-uppercase text"
   >
     <template v-slot:top>
       <v-toolbar
@@ -124,19 +124,38 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-flex>
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="indigo"
+        >
+          <v-icon
+            small
+            @click="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="red"
+        >
+          <v-icon
+            small
+            @click="deleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </v-btn>
+      </v-flex>
+
     </template>
     <template v-slot:no-data>
       <v-btn

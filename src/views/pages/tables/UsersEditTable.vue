@@ -4,8 +4,23 @@
     :headers="headers"
     :items="users"
     sort-by="name"
-    class="elevation-1"
+    class="elevation-1 text-uppercase text"
   >
+
+    <template v-slot:[`item.roles`]="{ item }">
+    <v-chip
+      v-for="roles in item.roles" :key="roles"
+      :color="roles == 'user'? 'primary': 'cyan'"
+      class="ml-0 mr-2 black--text"
+      label
+      small
+    >
+
+      {{ roles }}
+     
+    </v-chip>
+    </template>
+
     <template v-slot:top>
       <v-toolbar
         dark
@@ -15,39 +30,58 @@
         <v-toolbar-title>USERS</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-dialog
+          dark
           v-model="dialog"
-          max-width="500px"
+          max-width="700px"
         >
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
+          <v-card
+            class="mx-auto"
+          >
+            <v-card-title class="indigo darken-5">
+              <h3 class="text--white">{{ formTitle }}</h3>
             </v-card-title>
             <v-card-text
               class="pb-0">
-              <v-container>
                 <v-row>
                   <v-container>
-                    <h2 class="text-h6 success--text">
-                      Permissions:&nbsp;
-                      <v-fade-transition leave-absolute>
-                        <span :key="`roles-${roles}`">
+                    <v-flex class="my-4">
+                      <h2>Roles: 
+                        <v-chip
+                          v-for="roles in editedItem.roles" :key="roles"
+                          :color="roles == 'user'? 'primary': 'cyan'"
+                          class="ml-0 mr-2 black--text"
+                          label
+                          small
+                        >
                           {{ roles }}
-                        </span>
-                      </v-fade-transition>
-                    </h2>
-                    <v-divider class="mt-4"></v-divider>
-                    <v-switch
-                      v-model="swicth"
-                      color="primary"
-                      label="Change permissions"
-                      @click="switchRoles(editedItem.id)"
-                    ></v-switch>
+                        </v-chip>                      
+                      </h2>
+                    </v-flex>
+                    <v-flex class="my-4">
+                      <h2>Permissions: 
+                        <v-chip
+                          v-for="permissions in editedItem.permissions" :key="permissions"
+                          :color="permissions == 'view-technical-dashboard'? 'primary': 'cyan'"
+                          class="ml-0 mr-2 black--text"
+                          label
+                          small
+                        >
+                          {{ permissions }}
+                        </v-chip>                      
+                      </h2>
+                    </v-flex>
                   </v-container>
                 </v-row>
-              </v-container>
             </v-card-text>
-
+            <v-divider class="mx-2"></v-divider>
             <v-card-actions>
+             
+              <v-switch
+                v-model="swicth"
+                color="primary"
+                label="Change permissions"
+                @click="switchRoles(editedItem.id)"
+              ></v-switch>
               <v-spacer></v-spacer>
               <v-btn
                 color="blue darken-1"
@@ -73,24 +107,39 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        color="blue darken-2"
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        color="red"
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-flex>
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="indigo"
+        >
+          <v-icon
+            small
+            @click="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="red"
+        >
+          <v-icon
+            small
+            @click="deleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </v-btn>
+      </v-flex>
     </template>
   </v-data-table>
-    {{ allUsers }}
 </div>
 </template>
 <script>
@@ -138,7 +187,7 @@
         }),
 
         formTitle () {
-          return this.editedIndex === -1 ? 'Roles | Permissions' : 'Roles'
+          return this.editedIndex === -1 ? 'Roles | Permissions' : 'Roles & Permissions'
         },
         users(){
           return this.objectToArrayUsers()

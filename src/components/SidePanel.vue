@@ -1,8 +1,6 @@
 <template>
     <v-navigation-drawer
       app
-      color="deep-purple darken-2"
-      dark
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
@@ -24,7 +22,7 @@
       <v-divider ></v-divider>
 
     <v-list nav dense>
-        <v-list-item-group color="grey lighten-4">
+        <v-list-item-group  color="blue">
             <v-list-item v-for="(item, i) in userItems" :key="i" link  @click="menuItems(item.route)">
                 <v-list-item-icon>
                     <v-icon text v-text="item.icon"></v-icon>
@@ -35,7 +33,7 @@
                 </v-list-item> 
         </v-list-item-group>
         <v-list-item-group 
-          color="grey lighten-4"
+          color="blue"
           v-if="$can($constants.permissions.viewAdminDashboard)"
           >
             <v-list-item v-for="(item, i) in adminItems" :key="i" link  @click="menuItems(item.route)">
@@ -69,6 +67,7 @@ export default {
           {icon: 'mdi-database', text: 'Contacts', route: '/contacts'},
           {icon: 'mdi-forum', text: 'Addresses', route: '/address'},
           {icon: 'mdi-form-select', text: 'Orders', route: '/orders'},
+          {icon: 'mdi-robot-industrial', text: 'Services', route: '/service'},
           {icon: 'mdi-database', text: 'Import excel', route: '/import'},
         ],
         mini: true,       

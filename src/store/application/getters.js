@@ -8,6 +8,9 @@ export default {
     customers(state){
         return state.customers
     },
+    services(state){
+        return state.services
+    },
     contacts(state){
         return state.contacts
     },

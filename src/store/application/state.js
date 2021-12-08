@@ -2,6 +2,7 @@ export default {
     notifications : [],
     orders:[],
     customers:[],
+    services:[],
     projects:[],
     serviceDetails: {},
     contacts: [],

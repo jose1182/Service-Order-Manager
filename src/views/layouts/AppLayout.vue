@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="grey lighten-3">
     <SidePanel/>
     <v-app-bar
       app 

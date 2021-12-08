@@ -7,6 +7,7 @@
       v-model="valid"
       lazy-validation
     >
+    <!--
     <div>
       <v-row no-gutters justify="center" align="center">
         <v-col cols="12" sm="4">
@@ -30,7 +31,7 @@
         </v-col>
       </v-row>    
     </div>
-    
+    -->
     </v-form>
     <v-divider class="mt-4"></v-divider>
 
@@ -38,14 +39,16 @@
     :headers="headers"
     :items="ordersList.service_orders"
     sort-by="name"
-    class="elevation-1"
+    class="elevation-1 text-uppercase text"
   >
+
   <template v-slot:[`item.order_service`]="{ item }">
-  <v-chip
-    :color="getColor(item.order_service)"
-    dark
-    @click="routerGoService(item)"
-  >
+    <v-chip
+        :color="item.order_service !== 'not created'? 'green lighten-1': 'red lighten-1'"
+        class="ml-0 mr-2 black--text"
+        label
+        @click="routerGoService(item)"
+    >
     {{ item.order_service }}
 
   </v-chip>
@@ -211,19 +214,37 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-flex>
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="indigo"
+        >
+          <v-icon
+            small
+            @click="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+
+        <v-btn
+          small
+          dark
+          class="ma-2"
+          fab
+          color="red"
+        >
+          <v-icon
+            small
+            @click="deleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+        </v-btn>
+      </v-flex>
     </template>
     <template v-slot:no-data>
       <v-btn
@@ -233,6 +254,7 @@
       </v-btn>
     </template>
   </v-data-table>
+
 </v-container>
 </template>
 <script>
@@ -258,7 +280,7 @@ import { mapActions, mapGetters } from 'vuex'
         { text: 'Description', value: 'description' },
         { text: 'Order date', value: 'order_date' },
         { text: 'Shipment date', value: 'shipment_date' },
-        { text: 'Order Service', value: 'order_service' },
+        { text: 'Status', value: 'order_service' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
@@ -323,7 +345,7 @@ import { mapActions, mapGetters } from 'vuex'
             addService: 'application/addService',
             createService: 'application/createService',
             importOrders : 'application/importOrders',   
-            getService:'application/getService',
+            getServiceDetail:'application/getServiceDetail',
             projects: 'application/getProjects',
             costumers: 'application/getCustomers',     
             }),
@@ -350,7 +372,7 @@ import { mapActions, mapGetters } from 'vuex'
                 })
                 .catch(() => {
                     this.addNotification({
-                        text: 'Faild to delete customer!',
+                        text: 'Fail to delete customer!',
                         show: true
                     })
                 });    
@@ -386,7 +408,7 @@ import { mapActions, mapGetters } from 'vuex'
                 })
                 .catch(() => {
                     this.addNotification({
-                        text: 'Faild to update customer!',
+                        text: 'Fail to update customer!',
                         show: true
                     })
                 });            
@@ -438,9 +460,17 @@ import { mapActions, mapGetters } from 'vuex'
         else return 'green'
       },
       routerGoService(item){
-        //this.getService(item.service_id).then(() => {
-          this.$router.push({ name: 'service', params: { serviceId:  item.service_id}}) 
-        //})
+
+        if(item.order_service === 'not created'){
+            this.addNotification({
+                show: true,
+                text: 'Service was not created'
+            })
+
+            return;
+        }
+
+        this.$router.push({ name: 'serviceDetail', params: { serviceId:  item.service_id}}) 
 
       },
 

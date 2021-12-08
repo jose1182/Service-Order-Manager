@@ -93,8 +93,17 @@ const routes = [
         }
       },
       {
-        path: '/service/:serviceId',
+        path: '/service',
         name: 'service',
+        component: () => import(/*webpackChunkName: "service" */ '../views/pages/admin/service/Service.vue'),
+        meta:{
+          middleware: [Middlewares.auth, Middlewares.checkPermissions],
+          permissions: ['view-admin-dashboard']
+        }
+      },
+      {
+        path: '/serviceDetail/:serviceId',
+        name: 'serviceDetail',
         props: true,
         beforeEnter: (to, from, next) => {
           to.params.myCustomizations = {
@@ -102,7 +111,7 @@ const routes = [
           }
           next();
         },
-        component: () => import(/* webpackChunkName: "service" */ '../views/pages/admin/service/Service.vue'),
+        component: () => import(/* webpackChunkName: "serviceDetail" */ '../views/pages/admin/service/ServiceDetail.vue'),
         meta:{
           middleware: [Middlewares.auth, Middlewares.checkPermissions],
           permissions: ['view-technical-dashboard']

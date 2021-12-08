@@ -224,14 +224,28 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          sm="6"
+        >
+          <h3>Bar Chart Example in Vue</h3>
+          <BarChart/>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
 
+import BarChart from '@/components/BarChart'
+
 export default {
   name: 'Home',
+  components:{
+    BarChart
+  },
   data: () => ({
      tab: null,
      text: 'center',

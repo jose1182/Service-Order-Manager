@@ -1,5 +1,5 @@
 <template>
-    <v-container class="m-5">
+    <v-container fluid class="spacing-playground pa-6">
         <UsersEditTable/>
     </v-container>
 </template>
